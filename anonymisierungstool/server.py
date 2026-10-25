@@ -92,7 +92,7 @@ def favicon():
 
 @app.get("/api/config")
 def api_config():
-    org_info = {"name": ORG_NAME, "slogan": _cfg.ORG_SLOGAN, "address": _cfg.ORG_ADDRESS, "links": _cfg.ORG_LINKS, "license": _cfg.LICENSE_NAME, "year": _cfg.COPYRIGHT_YEAR}
+    org_info = {"name": ORG_NAME, "slogan": _cfg.ORG_SLOGAN, "address": _cfg.ORG_ADDRESS, "phone": _cfg.ORG_PHONE, "person": _cfg.ORG_PERSON, "email": _cfg.ORG_EMAIL, "links": _cfg.ORG_LINKS, "license": _cfg.LICENSE_NAME, "year": _cfg.COPYRIGHT_YEAR}
     return jsonify(app=APP_NAME, version=__version__, org=ORG_NAME, contact=ORG_CONTACT, org_info=org_info,
                    categories=CATEGORIES, drop_order=DROPDOWN_ORDER, date_modes=DATE_MODES, max_mb=MAX_UPLOAD_MB,
                    out_dir=str(titel.base_dir()))

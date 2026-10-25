@@ -360,7 +360,8 @@ function buildInfo() {
     "Alles läuft nur auf Ihrem Rechner, ohne Internet und ohne Cloud-KI.</p>" +
     "<p><strong>Warum ist das Programm so groß?</strong> In ihm steckt eine kleine lokale KI (ein Sprachmodell) zur Texterkennung. Sie läuft ausschließlich " +
     "auf Ihrem Rechner und erkennt Namen, Orte und Firmen. Sie macht das Programm groß, ist aber der Grund, warum Ihre Unterlagen den Rechner nicht verlassen müssen.</p>" +
-    "<p><strong>Kontakt</strong><br>" + esc(o.name) + "<br>" + esc(o.address) + "<br>" + ext(L.web, L.web.replace("https://", "")) + " · " + ext(L.kontakt, "Kontaktseite") + "</p>" +
+    "<p><strong>Kontakt</strong><br>" + esc(o.name) + "<br>" + esc(o.address) + "<br>" + (o.person ? esc(o.person) + (o.email ? " · <a href='mailto:" + esc(o.email) + "'>" + esc(o.email) + "</a>" : "") + "<br>" : "") +
+    (o.phone ? "Telefon " + esc(o.phone) + "<br>" : "") + ext(L.web, L.web.replace("https://", "")) + " · " + ext(L.kontakt, "Kontaktseite") + "</p>" +
     "<p class='sub'>" + ext(L.impressum, "Impressum") + " · " + ext(L.datenschutz, "Datenschutz") + " · Quelltext und Lizenz (" + esc(o.license) + "): siehe Projektseite auf GitHub</p>";
   $("infoBody").innerHTML =
     "<p><strong>Alles lokal.</strong> Dieses Tool sendet nichts ins Internet und nutzt keine Cloud-KI. Ihre Dateien bleiben auf diesem Rechner. " +
@@ -393,7 +394,7 @@ function buildInfo() {
     "<li>Geben Sie nur die anonymisierte Fassung weiter. Prüfen Sie auch Bilder, Dateinamen und Metadaten.</li>" +
     "<li>Schützen Sie Ihren Rechner (Zugangssperre, Festplattenverschlüsselung) und sichern Sie die Ablage nur an geschützten Orten.</li></ul>" +
     "<h3>Webseite und Download</h3>" +
-    "<p>Für den Besuch unserer Webseite und das Herunterladen des Programms gilt die " + ext(L.datenschutz, "Datenschutzerklärung von " + o.name) + ". Verantwortlicher: " + esc(o.name) + ", " + esc(o.address) + ", " + ext(L.impressum, "Impressum") + ". Fragen: über die " + ext(L.kontakt, "Kontaktseite") + ".</p>" +
+    "<p>Für den Besuch unserer Webseite und das Herunterladen des Programms gilt die " + ext(L.datenschutz, "Datenschutzerklärung von " + o.name) + ". Verantwortlicher: " + esc(o.name) + ", " + esc(o.address) + ", " + ext(L.impressum, "Impressum") + ". Fragen: " + (o.email ? "<a href='mailto:" + esc(o.email) + "'>" + esc(o.email) + "</a> oder " : "") + "über die " + ext(L.kontakt, "Kontaktseite") + ".</p>" +
     "<p class='sub'>Dieser Hinweis beschreibt die Funktionsweise des Programms und ersetzt keine Rechts- oder Datenschutzberatung.</p>";
 }
 async function loadTitles() {

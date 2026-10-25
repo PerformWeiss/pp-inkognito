@@ -27,6 +27,9 @@ def main():
             "--add-data", "%s%sanonymisierungstool/templates" % (ROOT / "anonymisierungstool" / "templates", SEP),
             "--add-data", "%s%sanonymisierungstool/static" % (ROOT / "anonymisierungstool" / "static", SEP),
             "--hidden-import", "anonymisierungstool.server"]
+    priv = ROOT / "anonymisierungstool" / "kontakt_privat.json"   # nur im Installer, entsteht aus einem GitHub-Geheimnis
+    if priv.is_file():
+        args += ["--add-data", "%s%sanonymisierungstool" % (priv, SEP)]
     for pkg in ("spacy", "de_core_news_md", "thinc", "srsly", "cymem", "preshed", "blis", "murmurhash", "spacy_legacy", "spacy_loggers",
                 "pymupdf", "fitz", "docx"):
         args += ["--collect-all", pkg]

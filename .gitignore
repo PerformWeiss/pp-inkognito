@@ -11,3 +11,6 @@ build/
 dist/
 *.spec.bak
 dist-zip/
+
+# Persönliche Kontaktdaten (nur lokal und im Installer, nie im Repository)
+anonymisierungstool/kontakt_privat.json

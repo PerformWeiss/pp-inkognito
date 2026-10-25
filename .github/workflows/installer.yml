@@ -27,6 +27,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
           python -m spacy download de_core_news_md
+      - name: Kontaktdaten für das Programm (aus Geheimnis, nicht im Repository)
+        shell: bash
+        env:
+          KONTAKT: ${{ secrets.KONTAKT_PRIVAT_JSON }}
+        run: |
+          if [ -n "$KONTAKT" ]; then printf '%s' "$KONTAKT" > anonymisierungstool/kontakt_privat.json; fi
       - name: Tests
         run: python -m tests.test_core
       - name: Programm bauen
