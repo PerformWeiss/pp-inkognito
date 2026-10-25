@@ -55,6 +55,13 @@ input[type=text],input[type=password],select{background:var(--card);border:1px s
 .tag{font-size:11px;border:1px solid var(--warnline);background:var(--warn);border-radius:99px;padding:0 6px;margin-left:6px}
 .opts{display:grid;gap:10px;margin-top:14px}
 .opts label{display:grid;gap:3px;font-size:13px;color:var(--mute)}
+.opts select,.opts input[type=text]{max-width:420px}
+.opts>button{justify-self:start}
+#rDrop{border:2px dashed var(--line);border-radius:12px;padding:22px 16px;text-align:center;color:var(--mute);max-width:420px}
+#rDrop.over{border-color:var(--acc);background:rgba(31,95,191,.06)}
+#staged{margin-top:12px}
+#staged .srow{display:flex;gap:8px;align-items:center;padding:3px 0}
+#staged .srow button{padding:0 8px}
 .inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 #bar{position:fixed;display:none;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;box-shadow:0 6px 24px rgba(0,0,0,.2);gap:6px;align-items:center;flex-wrap:wrap;max-width:360px}
 dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);max-width:560px;padding:20px}
@@ -196,15 +203,15 @@ code{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding
   <div id="strip" class="strip" style="display:none"></div>
   <div class="card" id="intro">
     <label class="opts" style="margin:0 0 14px">Titel der Anonymisierung
-      <input type="text" id="title" list="titles" placeholder="z. B. Bewerbung Mustermann" autocomplete="off">
-      <span class="sub">Alle Dokumente mit demselben Titel teilen sich eine Schlüsseldatei und bekommen dieselben Pseudonyme. Der Titel ist zugleich der Ordnername. Einen vorhandenen Titel wählen, um weitere Dokumente hinzuzufügen.</span>
+      <input type="text" id="title" placeholder="z. B. Bewerbung Mustermann" autocomplete="off">
+      <span class="sub">Alle Dokumente mit demselben Titel teilen sich eine Schlüsseldatei und bekommen dieselben Pseudonyme. Der Titel ist zugleich der Ordnername.</span>
     </label>
-    <datalist id="titles"></datalist>
     <div id="drop">
-      <p><strong>Dateien hier ablegen</strong> oder <button id="pick">Dateien auswählen</button></p>
+      <p><strong>Dateien hier ablegen</strong> (auch mehrere, auch nacheinander) oder <button id="pick">Dateien auswählen</button></p>
       <p class="sub">Möglich sind PDF mit lesbarem Text (kein Scan), Word (.docx) und Text. <strong>PDFs lassen sich derzeit am einfachsten bearbeiten.</strong> Word-Dateien funktionieren genauso gut und werden in der Regel sauber übertragen, die Formatierung ändert sich dabei aber leicht. Gescannte Seiten erkennt das Tool nicht, sie lassen sich aber von Hand schwärzen. Die Ausgabe hat immer das Format der Datei, die Sie laden. Alles bleibt auf diesem Rechner.</p>
       <input type="file" id="file" accept=".docx,.pdf,.txt,.md" multiple hidden>
     </div>
+    <div id="staged"></div>
     <div id="upmsg"></div>
   </div>
 
@@ -259,9 +266,11 @@ code{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding
     <h2 style="margin-top:0">Persönliche Daten wieder einsetzen</h2>
     <p class="sub">Ersetzt in einem überarbeiteten Dokument (zum Beispiel nach der Arbeit mit einer KI) die Pseudonyme wieder durch die persönlichen Daten. Dafür wählen Sie den Titel, unter dem Sie anonymisiert haben. Danach steht im Dokument wieder der echte Name statt des erfundenen.</p>
     <div class="opts">
-      <label>Überarbeitetes Dokument (Word, PDF oder Text)
-        <input type="file" id="rFile" accept=".docx,.pdf,.txt,.md">
-      </label>
+      <div>
+        <div class="sub" style="margin-bottom:3px">Überarbeitetes Dokument (Word, PDF oder Text)</div>
+        <div id="rDrop"><p style="margin:0 0 6px"><strong>Datei hier ablegen</strong> oder <button class="sec small" id="rPick" type="button">Datei auswählen</button></p><p class="sub" style="margin:0" id="rName">Noch keine Datei gewählt.</p>
+          <input type="file" id="rFile" accept=".docx,.pdf,.txt,.md" hidden></div>
+      </div>
       <label>Titel der Anonymisierung
         <select id="rTitle"></select>
       </label>
@@ -270,7 +279,7 @@ code{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding
           <input type="file" id="rKey" accept=".anonkey">
         </label>
       </details>
-      <button id="rBtn">Persönliche Daten wieder einsetzen</button>
+      <button id="rBtn" class="small">Persönliche Daten wieder einsetzen</button>
       <div id="rMsg"></div>
     </div>
   </div>
@@ -402,10 +411,9 @@ function buildInfo() {
 }
 async function loadTitles() {
   const d = await j("/api/titles").catch(() => ({titles: [], with_key: []}));
-  $("titles").innerHTML = d.titles.map(t => "<option value='" + esc(t) + "'>").join("");
   $("rTitle").innerHTML = "";
+  $("rTitle").add(new Option(d.with_key.length ? "– Titel wählen –" : "(noch kein Titel vorhanden)", ""));
   for (const t of d.with_key) $("rTitle").add(new Option(t, t));
-  if (!d.with_key.length) $("rTitle").add(new Option("(noch kein Titel vorhanden)", ""));
 }
 $("agree").onchange = e => $("agreeBtn").disabled = !e.target.checked;
 $("agreeBtn").onclick = () => $("disclaimer").close();
@@ -539,7 +547,7 @@ $("tFolder").onclick = () => post("/api/open-folder", {title: CUR_T}).catch(e =>
 
 function startNew(title) {
   if (!confirmLeave()) return;
-  OPEN = []; ACT = -1; S = emptyDoc();
+  OPEN = []; ACT = -1; S = emptyDoc(); STAGED = []; renderStaged();
   $("title").value = title; $("title").readOnly = !!title;
   $("intro").style.display = ""; $("work").style.display = "none"; $("upmsg").innerHTML = ""; $("exmsg").innerHTML = "";
   renderStrip(); showTab("a");
@@ -556,9 +564,31 @@ $("aCrumb").addEventListener("click", e => {
 
 // ---- Upload (mehrere Dateien: Dokumentleiste)
 const newDocState = (name, title) => ({...emptyDoc(), name, title, pending: true, done: false, error: "", markKey: "", marks: [], rid: null, rm: true, exhtml: "", view: "text", warnings: [], original: null});
-function startFiles(files) {
+let STAGED = [];
+function renderStaged() {
+  const el = $("staged");
+  if (!STAGED.length) { el.innerHTML = ""; return; }
+  el.innerHTML = "<strong>" + STAGED.length + (STAGED.length === 1 ? " Datei" : " Dateien") + " bereit</strong>" +
+    STAGED.map((f, i) => "<div class='srow'><span>" + esc(f.name) + "</span> <span class='sub'>" + fmtSize(f.size) + "</span> <button class='sec' data-i='" + i + "' title='Entfernen'>×</button></div>").join("") +
+    "<p class='sub' style='margin:6px 0'>Weitere Dateien können Sie jederzeit dazulegen. Geben Sie oben einen Titel ein und starten Sie dann.</p>" +
+    "<button id='stageGo'>Anonymisierung starten</button>";
+  el.querySelectorAll("button[data-i]").forEach(b => b.onclick = () => { STAGED.splice(+b.dataset.i, 1); renderStaged(); });
+  $("stageGo").onclick = goStaged;
+}
+function goStaged() {
+  if (!$("title").value.trim()) {
+    $("upmsg").innerHTML = "<p class='err'>Bitte zuerst einen Titel für die Anonymisierung eingeben (oben). Er ist zugleich der Ordnername.</p>";
+    $("title").focus(); return;
+  }
+  const files = STAGED; STAGED = []; renderStaged(); $("upmsg").innerHTML = "";
+  startFiles(files, true);
+}
+$("title").addEventListener("keydown", e => { if (e.key === "Enter" && STAGED.length) goStaged(); });
+function startFiles(files, go) {
   files = Array.from(files);
   if (!files.length) return;
+  const known = OPEN.length || $("title").readOnly;   // Titel steht fest (weitere Dokumente zu einem Titel)
+  if (!known && !go) { STAGED.push(...files); renderStaged(); $("upmsg").innerHTML = $("title").value.trim() ? "" : "<p class='err'>Bitte noch einen Titel für die Anonymisierung eingeben, dann auf „Anonymisierung starten“ klicken.</p>"; if (!$("title").value.trim()) $("title").focus(); return; }
   const title = OPEN.length ? OPEN[0].title : $("title").value.trim();
   if (!title) { $("upmsg").innerHTML = "<p class='err'>Bitte zuerst einen Titel für die Anonymisierung eingeben.</p>"; return; }
   $("title").readOnly = true;
@@ -1188,9 +1218,19 @@ $("exmsg").addEventListener("click", e => {
 });
 
 // ---- Persönliche Daten wieder einsetzen
+const showRName = () => { const f = $("rFile").files[0]; $("rName").textContent = f ? "Gewählt: " + f.name : "Noch keine Datei gewählt."; };
+$("rPick").onclick = () => $("rFile").click();
+$("rFile").onchange = showRName;
+["dragover", "dragenter"].forEach(ev => $("rDrop").addEventListener(ev, e => { e.preventDefault(); $("rDrop").classList.add("over"); }));
+["dragleave", "drop"].forEach(ev => $("rDrop").addEventListener(ev, e => { e.preventDefault(); $("rDrop").classList.remove("over"); }));
+$("rDrop").addEventListener("drop", e => {
+  const f = e.dataTransfer.files[0]; if (!f) return;
+  const dt = new DataTransfer(); dt.items.add(f); $("rFile").files = dt.files; showRName();
+});
 $("rBtn").onclick = async () => {
   const f = $("rFile").files[0], k = $("rKey").files[0], t = $("rTitle").value;
-  if (!f || (!k && !t)) { $("rMsg").innerHTML = "<p class='err'>Bitte Dokument und Titel (oder Schlüsseldatei) auswählen.</p>"; return; }
+  if (!f) { $("rMsg").innerHTML = "<p class='err'>Bitte zuerst das überarbeitete Dokument auswählen oder hier ablegen.</p>"; return; }
+  if (!k && !t) { $("rMsg").innerHTML = "<p class='err'>Bitte den Titel auswählen, unter dem anonymisiert wurde (oder eine Schlüsseldatei). So wird sichergestellt, dass die richtigen Daten eingesetzt werden.</p>"; return; }
   const fd = new FormData(); fd.append("file", f);
   if (k) fd.append("key", k); else fd.append("title", t);
   $("rMsg").innerHTML = "<p class='sub'>Wird bearbeitet …</p>"; $("rBtn").disabled = true;
