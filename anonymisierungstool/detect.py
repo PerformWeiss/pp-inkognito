@@ -34,9 +34,10 @@ SOURCE_LABELS = {
     "muster": "Muster",
     "lebenslauf": "Lebenslauf-Muster",
     "modell": "Sprachmodell",
+    "wohnort": "Wohnort aus der Adresse",
 }
 
-PRIO = {"woerterbuch": 0, "muster": 1, "lebenslauf": 2, "modell": 3}
+PRIO = {"woerterbuch": 0, "wohnort": 1, "muster": 1, "lebenslauf": 2, "modell": 3}
 
 
 @dataclass
@@ -123,7 +124,7 @@ def _pattern_cands(text):
     # Der Wohnort aus der Adresse taucht oft noch einmal auf (auch in Versalien, z. B. als Überschrift)
     for place in home_places:
         for m in re.finditer(r"(?<!\w)%s(?!\w)" % re.escape(place), text, re.IGNORECASE):
-            out.append(Cand(m.start(), m.end(), "ort", "muster"))
+            out.append(Cand(m.start(), m.end(), "ort", "wohnort"))
     for m in RX_COMPANY.finditer(text):
         s, e = m.start(), m.end()
         words = re.split(r"[ \t]", text[s:e])
@@ -614,7 +615,7 @@ def analyze(text):
     for f in findings:
         f["count"] = max(1, count_occurrences(text, f["text"]))
         f["source_label"] = SOURCE_LABELS[f["source"]]
-        f["checked"] = (f["category"] in DEFAULT_ON and f["confident"]) or f["source"] == "woerterbuch"
+        f["checked"] = (f["category"] in DEFAULT_ON and f["confident"]) or f["source"] in ("woerterbuch", "wohnort")
         out.append(f)
     order = list(CATEGORIES)
     out.sort(key=lambda f: (order.index(f["category"]), text.find(f["text"]), -len(f["text"]), f["text"]))

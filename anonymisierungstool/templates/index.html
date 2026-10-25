@@ -8,8 +8,7 @@
 <style>
 :root{--bg:#f6f7f9;--card:#fff;--ink:#1b2430;--mute:#5d6b7c;--line:#dde2e8;--acc:#1f5fbf;--accink:#fff;--warn:#fff4d6;--warnline:#e6c86b;--bad:#b3261e;--ok:#1d7a46;
 --c-name:#ffd9a8;--c-geburtsdatum:#ffc9d6;--c-adresse:#d6e8ff;--c-email:#cfeedd;--c-telefon:#cfeedd;--c-iban:#e4d6ff;--c-url:#e4d6ff;--c-firma:#ffeaa0;--c-projekt:#e3ecb4;--c-ort:#d3f0f0;--c-sonstiges:#e3e3e3}
-@media (prefers-color-scheme:dark){:root{--bg:#12161c;--card:#1b222b;--ink:#e8edf3;--mute:#9aa7b6;--line:#2c3744;--acc:#6aa2ff;--accink:#08111f;--warn:#3a3114;--warnline:#7a6420;--bad:#ff8a80;--ok:#6fd49a;
---c-name:#6b4a1c;--c-geburtsdatum:#6b2a3d;--c-adresse:#1f3f6b;--c-email:#1f5a3a;--c-telefon:#1f5a3a;--c-iban:#473370;--c-url:#473370;--c-firma:#6b5a14;--c-projekt:#4a5a1c;--c-ort:#1d5a5a;--c-sonstiges:#444}}
+@media (prefers-color-scheme:dark){:root{--bg:#12161c;--card:#1b222b;--ink:#e8edf3;--mute:#9aa7b6;--line:#2c3744;--acc:#6aa2ff;--accink:#08111f;--warn:#3a3114;--warnline:#7a6420;--bad:#ff8a80;--ok:#6fd49a}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
 header{padding:12px max(24px,calc((100% - 1352px) / 2));border-bottom:1px solid var(--line);background:var(--card);display:flex;gap:16px;align-items:stretch;justify-content:space-between;flex-wrap:wrap}
@@ -32,8 +31,8 @@ input[type=text],input[type=password],select{background:var(--card);border:1px s
 #doc{white-space:pre-wrap;word-break:break-word;max-height:75vh;overflow:auto;font-size:14px;line-height:1.6}
 #doc mark{border-radius:3px;padding:0 1px;color:inherit}
 #doc.word{white-space:normal;max-height:80vh;background:#dfe3e8;padding:10px;font-size:inherit;line-height:normal}
-.flash{outline:3px solid var(--acc)!important;outline-offset:2px;animation:flashfade 1.8s ease-out}
-@keyframes flashfade{0%{box-shadow:0 0 0 8px rgba(31,95,191,.35)}100%{box-shadow:0 0 0 0 rgba(31,95,191,0)}}
+.flash{outline:4px solid #ff2d55!important;outline-offset:3px;opacity:1!important;border-radius:3px;animation:flashfade 3s ease-out}
+@keyframes flashfade{0%{box-shadow:0 0 0 14px rgba(255,45,85,.45)}60%{box-shadow:0 0 0 6px rgba(255,45,85,.25)}100%{box-shadow:0 0 0 0 rgba(255,45,85,0)}}
 .t .tx{cursor:pointer}
 .catsel{font-size:12px;padding:1px 3px;margin-top:3px;max-width:100%}
 .kinote{font-size:12.5px;line-height:1.4;color:var(--mute);border-left:3px solid var(--acc);padding:2px 10px;margin:8px 0}
@@ -45,7 +44,9 @@ input[type=text],input[type=password],select{background:var(--card);border:1px s
 .wpage .pb{border:0;border-top:1px dashed #bbb;margin:12px 0}
 .wpage .whead,.wpage .wfoot{opacity:.55;border-bottom:1px dashed #ccc;margin-bottom:6px}
 .wpage .wfoot{border:0;border-top:1px dashed #ccc;margin:6px 0 0}
-#doc mark.off{background:transparent!important;border-bottom:2px dotted var(--mute)}
+#doc mark{color:#1b2430}
+#doc mark.off{background:transparent!important;border-bottom:2px dotted var(--mute);outline:2px dashed #e5484d;outline-offset:1px;border-radius:3px}
+.mk.off{background:transparent!important;opacity:1;outline:2px dashed #e5484d}
 .cat{margin:10px 0 2px;font-weight:600;font-size:13px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
 .row{display:grid;grid-template-columns:auto minmax(0,1fr) repeat(3,auto);gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line)}
 .row .t{word-break:break-word}
@@ -623,7 +624,6 @@ async function analyze(st, file) {
     else d = await post("/api/resume", {title: st.title, original: st.name});   // gespeichertes Original samt Bearbeitungsstand
     Object.assign(st, {docId: d.doc_id, text: d.text, kind: d.kind, images: d.images, pages: d.pages || [], warnings: d.warnings, pending: false, original: d.original,
       findings: d.findings.map((f, i) => ({...f, id: i, action: "pseudonym", date_mode: "jahr"}))});
-    if (d.kind === "docx") st.view = "orig";   // Word startet in der Seitenansicht
     if (d.state) {   // früherer Stand: Auswahl, geänderte Pseudonyme, Schwärzungen
       st.findings = d.state.findings || st.findings; st.blackouts = d.state.blackouts || []; st.rm = d.state.rm !== false; st.done = !!d.state.done;
     }
@@ -670,7 +670,7 @@ function activate(i) {
   const isPdf = S.kind === "pdf" && S.pages.length > 0, isWord = S.kind === "docx";
   $("viewbar").style.display = isPdf || isWord ? "flex" : "none";
   $("vRes").style.display = isPdf || isWord ? "" : "none";
-  setView(isPdf || isWord ? (S.view === "result" ? "result" : "orig") : "text");
+  setView(isPdf || isWord ? (S.view === "orig" ? "orig" : "result") : "text");   // zuerst das Ergebnis zeigen; "Original" nur, wenn bewusst gewählt
   render(); renderStrip(); updateCrumbs();
 }
 async function openChip(i) {
@@ -781,7 +781,7 @@ function findRow(f) {
   const cb = Object.assign(document.createElement("input"), {type: "checkbox", checked: f.checked});
   cb.onchange = () => { f.checked = cb.checked; renderDoc(); paintPreview(); schedulePreview(); syncCatBoxes(); };
   const t = document.createElement("div"); t.className = "t";
-  t.innerHTML = "<span class='tx' title='Anklicken: zur Stelle im Dokument springen' style='background:var(--c-" + f.category + ");border-radius:3px;padding:0 3px'>" + esc(f.text) + "</span>" + (f.confident ? "" : "<span class='tag'>bitte prüfen</span>") +
+  t.innerHTML = "<span class='tx' title='Anklicken: zur Stelle im Dokument springen' style='background:var(--c-" + f.category + ");color:#1b2430;border-radius:3px;padding:0 3px'>" + esc(f.text) + "</span>" + (f.confident ? "" : "<span class='tag'>bitte prüfen</span>") +
     "<div class='meta'>" + f.count + "× · " + esc(f.source_label || "Manuell") +
       (VIEW === "orig" && S.markCount && !S.markCount[f.text] ? " · <span style='color:var(--bad)'>auf der Seite nicht gefunden (wird nicht ersetzt)</span>" : "") + "</div>";
   const pv = document.createElement("div"); pv.className = "pv";
@@ -870,14 +870,15 @@ async function refreshResult() {
   if (S === st && VIEW === "result") drawResult();
 }
 function drawResult() {
-  $("hint").textContent = "So sieht die fertige Datei aus. Die ersetzten Stellen sind markiert; ein Klick darauf öffnet die Optionen.";
+  $("hint").textContent = "So sieht die fertige Datei aus. Die ersetzten Stellen sind markiert; ein Klick darauf öffnet die Optionen. Gestrichelt umrandet = erkannt, aber nicht ersetzt.";
   const rev = {};
   for (const f of S.findings) { if (!f.checked || f.action === "schwaerzen") continue; const r = (S.pvMap || {})[f.text]; if (r && !rev[r]) rev[r] = f; }
+  for (const f of S.findings) if (!f.checked && !rev[f.text]) rev[f.text] = f;   // erkannt, aber nicht ersetzt: gestrichelt umrandet, damit nichts übersehen wird
   S.pvRev = rev;
   if (S.kind === "docx") { renderDoc(); return; }
   buildPages("result");
   setTool(TOOL);
-  $("hint").textContent = "So sieht die fertige Datei aus. Hier können Sie genauso markieren und schwärzen wie im Original; ein Klick auf eine ersetzte Stelle öffnet ihre Optionen.";
+  $("hint").textContent = "So sieht die fertige Datei aus. Hier können Sie genauso markieren und schwärzen wie im Original; ein Klick auf eine ersetzte Stelle öffnet ihre Optionen. Gestrichelt umrandet = erkannt, aber nicht ersetzt.";
   paintResultMarks(rev);
 }
 async function paintResultMarks(rev) {
@@ -888,9 +889,9 @@ async function paintResultMarks(rev) {
     if (S !== st || VIEW !== "result" || st.prid !== rid) return;
     for (const m of d.marks) {
       const f = rev[m.term], ov = pageOv(m.page); if (!f || !ov) continue;
-      const el = document.createElement("div"); el.className = "mk"; el.dataset.term = f.text;
+      const el = document.createElement("div"); el.className = f.checked ? "mk" : "mk off"; el.dataset.term = f.text;
       el.style.cssText = "left:" + (m.x * 100) + "%;top:" + (m.y * 100) + "%;width:" + (m.w * 100) + "%;height:" + (m.h * 100) + "%;background:" + PAGE_COLORS[f.category];
-      el.title = m.term + " ← " + f.text + " (" + CFG.categories[f.category] + ")";
+      el.title = f.checked ? m.term + " ← " + f.text + " (" + CFG.categories[f.category] + ")" : f.text + " (" + CFG.categories[f.category] + "): erkannt, aber nicht ersetzt. Anklicken zum Ändern.";
       el.onclick = e => { const r = el.getBoundingClientRect(); openPop(f, {left: r.left, bottom: r.bottom}); e.stopPropagation(); };
       ov.append(el);
     }
@@ -900,16 +901,17 @@ async function paintResultMarks(rev) {
 // ---- Zur Stelle springen
 const FOCUS = {};
 function focusFinding(f) {
-  if (VIEW === "result") setView("orig");
+  let retried = false;
   const n = FOCUS[f.id] = (FOCUS[f.id] === undefined ? 0 : FOCUS[f.id] + 1);
   const run = () => {
     let els = [...document.querySelectorAll('#doc mark[data-id="' + f.id + '"]')].filter(e => e.offsetParent !== null);
     if (!els.length) els = [...document.querySelectorAll("#pages .mk")].filter(e => e.dataset.term === f.text);
+    if (!els.length && VIEW === "result" && !retried) { retried = true; setView("orig"); setTimeout(run, 80); return; }   // nur wenn die Stelle im Ergebnis nicht vorkommt (z. B. geschwärzt)
     if (!els.length) { $("hint").textContent = "„" + f.text + "“ wurde im Dokument nicht gefunden (wird dann auch nicht ersetzt)."; return; }
     const el = els[n % els.length];
     el.scrollIntoView({block: "center", behavior: "smooth"});
     el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
-    setTimeout(() => el.classList.remove("flash"), 1900);
+    setTimeout(() => el.classList.remove("flash"), 3100);
   };
   setTimeout(run, 60);
 }
