@@ -42,8 +42,13 @@ Ab dem zweiten Start öffnet sich das Programm wie jedes andere. Beim allererste
 
 ### Windows: `PP-Inkognito-Windows-Setup.exe`
 
-1. Die Setup-Datei doppelklicken. Erscheint *„Der Computer wurde durch Windows geschützt“*, klicken Sie auf **Weitere Informationen** und dann auf **Trotzdem ausführen**.
-2. Dem Installationsassistenten folgen. PP-Inkognito finden Sie danach im Startmenü.
+1. **Download behalten.** Edge oder Chrome melden vielleicht, dass die Datei „nicht häufig heruntergeladen“ wird oder schädlich sein könnte.
+   - **Edge:** auf die drei Punkte (…) neben der Meldung klicken, dann **Beibehalten** und **Trotzdem beibehalten**.
+   - **Chrome:** auf den Pfeil neben der Meldung klicken, dann **Beibehalten**.
+2. **Setup starten.** Die Datei doppelklicken. Erscheint *„Der Computer wurde durch Windows geschützt“*, auf **Weitere Informationen** und dann auf **Trotzdem ausführen** klicken.
+3. **Installieren.** Dem Assistenten folgen. PP-Inkognito finden Sie danach im Startmenü.
+
+Warnt Ihr Virenschutz, laden Sie die Datei erneut von dieser Seite herunter. Die Warnungen kommen nur daher, dass das Programm nicht kostenpflichtig signiert ist.
 
 Der Quelltext ist öffentlich, und die Installer werden automatisch daraus gebaut.
 

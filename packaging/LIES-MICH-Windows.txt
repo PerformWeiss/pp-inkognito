@@ -1,15 +1,23 @@
 PP-Inkognito (Windows) - BITTE ZUERST LESEN
 ===========================================
 
-Installieren
-Doppelklicken Sie die Setup-Datei und folgen Sie dem Assistenten. Danach finden Sie PP-Inkognito im Startmenü (und auf dem Desktop,
-wenn Sie das angekreuzt haben).
+Installieren (3 Schritte)
 
-Warum die Sicherheitsmeldung?
-Das Programm ist kostenlos und nicht mit einem Entwicklerzertifikat signiert (das kostet Geld pro Jahr). Deshalb zeigt Windows
-beim ersten Öffnen "Der Computer wurde durch Windows geschützt". Das Programm ist nicht beschädigt.
-- Klicken Sie auf "Weitere Informationen" und dann auf "Trotzdem ausführen".
-- Falls Ihr Virenschutz warnt: Die Datei stammt von der offiziellen Projektseite; Sie können sie dort erneut herunterladen.
+1. Herunterladen behalten
+   Edge oder Chrome melden vielleicht, dass die Datei "nicht häufig heruntergeladen" wird oder schädlich sein könnte.
+   - Edge: Auf die drei Punkte (...) neben der Meldung klicken, dann "Beibehalten" und "Trotzdem beibehalten".
+   - Chrome: Auf den Pfeil neben der Meldung klicken, dann "Beibehalten".
+
+2. Setup starten
+   Doppelklicken Sie die Setup-Datei. Erscheint "Der Computer wurde durch Windows geschützt", klicken Sie auf
+   "Weitere Informationen" und dann auf "Trotzdem ausführen".
+
+3. Installieren
+   Folgen Sie dem Assistenten. Danach finden Sie PP-Inkognito im Startmenü (und auf dem Desktop, wenn Sie das angekreuzt haben).
+
+Warum diese Meldungen?
+Das Programm ist kostenlos und nicht mit einem Entwicklerzertifikat signiert (das kostet Geld pro Jahr). Es ist nicht beschädigt.
+Der Quelltext ist öffentlich einsehbar. Falls Ihr Virenschutz warnt: Laden Sie die Datei von der offiziellen Projektseite erneut herunter.
 
 Arbeiten
 Nach dem Start öffnet sich Ihr Browser mit dem Programm (der erste Start dauert etwas länger). Es läuft nur auf Ihrem Rechner,

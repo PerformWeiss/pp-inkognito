@@ -70,4 +70,4 @@ jobs:
             --repo "${{ github.repository }}" \
             --latest \
             --title "PP-Inkognito ${{ github.ref_name }}" \
-            --notes "**Beta-Version.** Bitte beim ersten Start die Anleitung beachten, denn das Programm ist nicht signiert und Mac und Windows warnen beim ersten Öffnen. **Mac:** .dmg öffnen, PP-Inkognito in den Ordner Programme ziehen, doppelklicken, auf Fertig klicken, dann Systemeinstellungen > Datenschutz & Sicherheit > ganz nach unten > Dennoch öffnen. **Windows:** Setup-Datei ausführen, bei der Warnung Weitere Informationen > Trotzdem ausführen. Die genaue Schritt-für-Schritt-Anleitung steht in der README und in der Datei LIES-MICH.txt. Die Erkennung ist nicht zu 100 % zuverlässig: bitte jedes Ergebnis prüfen."
+            --notes-file .github/release-notes.md
