@@ -560,6 +560,18 @@ def api_quit():
     return jsonify(ok=True)
 
 
+def _already_running(port):
+    """True, wenn auf diesem Port schon dieses Tool läuft (erkannt am Zugriffstoken, das aus der Datei zugang.txt stammt)."""
+    import urllib.request
+
+    try:
+        req = urllib.request.Request("http://127.0.0.1:%d/api/config" % port, headers={"Cookie": "tok=%s" % TOKEN})
+        with urllib.request.urlopen(req, timeout=1.5) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
 def _free_port(preferred=0):
     with socket.socket() as s:
         try:
@@ -571,6 +583,10 @@ def _free_port(preferred=0):
 
 def main(open_browser=True):
     wanted = int(os.environ.get("ANONYMISIERUNGSTOOL_PORT") or DEFAULT_PORT)
+    if _already_running(wanted):   # zweiter Start (z. B. Doppelklick auf das Programm-Symbol): nur den Browser zur laufenden Sitzung öffnen
+        if open_browser and not os.environ.get("ANONYMISIERUNGSTOOL_NOBROWSER"):
+            webbrowser.open("http://127.0.0.1:%d/?t=%s" % (wanted, TOKEN))
+        return
     port = _free_port(wanted)
     PORT["value"] = port
     url = "http://127.0.0.1:%d/?t=%s" % (port, TOKEN)

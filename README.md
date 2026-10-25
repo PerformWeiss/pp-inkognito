@@ -25,7 +25,16 @@ der Grund, warum Ihre Unterlagen den Rechner nicht verlassen müssen.
 
 ## Installation
 
-**Für Anwendende:** Laden Sie unter [Releases](../../releases) die ZIP-Datei für Ihr System (Mac oder Windows) herunter, entpacken Sie sie und folgen Sie der Datei `LIES-MICH.txt` im Ordner. Das Programm ist in dieser Beta noch nicht signiert, daher fragt Ihr System beim ersten Start nach einer Bestätigung.
+**Für Anwendende:** Laden Sie unter [Releases](../../releases) die Datei für Ihr System herunter.
+
+- **Mac:** `PP-Inkognito-…-Mac.dmg` öffnen und das Symbol **PP-Inkognito** auf den Ordner **Programme** ziehen. Beim ersten Start Rechtsklick auf das Programm > **Öffnen**.
+- **Windows:** `PP-Inkognito-…-Windows-Setup.exe` doppelklicken und dem Assistenten folgen. Beim ersten Start unter "Weitere Informationen" auf **Trotzdem ausführen** klicken.
+
+**Warum kommt eine Sicherheitsmeldung?** PP-Inkognito ist kostenlos und nicht signiert. Apple und Microsoft verlangen für die
+Signatur ein kostenpflichtiges Entwicklerkonto beziehungsweise Zertifikat (jährlich). Wir verzichten darauf, damit das Programm
+kostenlos bleibt. Deshalb warnen macOS und Windows beim ersten Start vor einem "nicht verifizierten Entwickler". Das Programm ist
+nicht beschädigt; der Quelltext ist öffentlich und die Installer werden automatisch aus ihm gebaut. Wer sicher gehen will, kann es auch
+selbst aus dem Quelltext starten (siehe unten). Details stehen in der Datei `LIES-MICH.txt` im Download.
 
 **Für Entwickelnde:** Voraussetzung: Python 3.9 oder neuer.
 

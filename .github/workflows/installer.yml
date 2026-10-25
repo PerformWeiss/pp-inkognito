@@ -25,7 +25,7 @@ jobs:
       - name: Abhängigkeiten installieren
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt pyinstaller
+          pip install -r requirements.txt pyinstaller pillow
           python -m spacy download de_core_news_md
       - name: Kontaktdaten für das Programm (aus Geheimnis, nicht im Repository)
         shell: bash
@@ -35,12 +35,17 @@ jobs:
           if [ -n "$KONTAKT" ]; then printf '%s' "$KONTAKT" > anonymisierungstool/kontakt_privat.json; fi
       - name: Tests
         run: python -m tests.test_core
+      - name: Inno Setup bereitstellen (nur Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (-not (Get-Command iscc -ErrorAction SilentlyContinue) -and -not (Test-Path "C:\Program Files (x86)\Inno Setup 6\ISCC.exe")) { choco install innosetup -y --no-progress }
       - name: Programm bauen
         run: python packaging/build.py ${{ matrix.platform }}
       - uses: actions/upload-artifact@v4
         with:
           name: PP-Inkognito-${{ matrix.platform }}
-          path: dist-zip/*.zip
+          path: dist-zip/*
           if-no-files-found: error
 
   release:
@@ -58,8 +63,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ github.ref_name }}" artifacts/*.zip \
+          gh release create "${{ github.ref_name }}" artifacts/* \
             --repo "${{ github.repository }}" \
             --title "PP-Inkognito ${{ github.ref_name }} (Beta)" \
-            --notes "Beta-Version. Entpacken und die Datei LIES-MICH.txt beachten (Programm ist noch nicht signiert). Erkennung nicht zu 100 % zuverlässig: bitte jedes Ergebnis prüfen." \
+            --notes "Beta-Version. Mac: .dmg öffnen und PP-Inkognito in den Ordner Programme ziehen. Windows: Setup-Datei ausführen. Die Programme sind nicht signiert, Hinweise dazu stehen in der README. Erkennung nicht zu 100 % zuverlässig: bitte jedes Ergebnis prüfen." \
             --prerelease

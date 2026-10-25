@@ -1,16 +1,19 @@
 PP-Inkognito (Windows)
 ======================
 
-Start
-1. Die ZIP-Datei vollständig entpacken (Rechtsklick > "Alle extrahieren") und den Ordner "PP-Inkognito" an einen festen Ort legen.
-2. In dem Ordner "PP-Inkognito.exe" doppelklicken.
-   Beim ersten Start meldet Windows evtl. "Der Computer wurde durch Windows geschützt". Klicken Sie auf "Weitere Informationen"
-   und dann auf "Trotzdem ausführen". Das Programm ist noch nicht signiert.
-3. Es öffnet sich ein schwarzes Fenster (bitte offen lassen) und kurz danach Ihr Browser mit dem Programm.
-   Der erste Start dauert etwas länger.
-4. Beenden: im Programm oben rechts auf "Beenden" klicken oder das schwarze Fenster schließen.
+Installieren
+Doppelklicken Sie die Setup-Datei und folgen Sie dem Assistenten. Danach finden Sie PP-Inkognito im Startmenü (und auf dem Desktop,
+wenn Sie das angekreuzt haben).
 
-Alles läuft nur auf Ihrem Rechner, ohne Internet. Ihre Ergebnisse liegen im Ordner Dokumente\Anonymisierungen.
+Warum die Sicherheitsmeldung?
+Das Programm ist kostenlos und nicht mit einem Entwicklerzertifikat signiert (das kostet Geld pro Jahr). Deshalb zeigt Windows
+beim ersten Öffnen "Der Computer wurde durch Windows geschützt". Das Programm ist nicht beschädigt.
+- Klicken Sie auf "Weitere Informationen" und dann auf "Trotzdem ausführen".
+- Falls Ihr Virenschutz warnt: Die Datei stammt von der offiziellen Projektseite; Sie können sie dort erneut herunterladen.
+
+Arbeiten
+Nach dem Start öffnet sich Ihr Browser mit dem Programm (der erste Start dauert etwas länger). Es läuft nur auf Ihrem Rechner,
+ohne Internet. Ergebnisse liegen im Ordner Dokumente\Anonymisierungen. Beenden: im Programm oben rechts auf "Beenden" klicken.
 Hinweise zum Datenschutz stehen im Programm unten unter "Datenschutz".
 
 PerformPlus GmbH · Kontakt: https://performplus.de/kontakt/

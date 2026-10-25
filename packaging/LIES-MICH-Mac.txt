@@ -1,16 +1,21 @@
 PP-Inkognito (Mac)
 ==================
 
-Start
-1. Den entpackten Ordner "PP-Inkognito" an einen festen Ort legen (z. B. Programme oder Dokumente).
-2. In dem Ordner die Datei "PP-Inkognito" per Rechtsklick > "Öffnen" starten.
-   Beim ersten Start meldet macOS, dass die Entwicklerin nicht verifiziert ist. Bestätigen Sie mit "Öffnen".
-   Falls "Öffnen" nicht angeboten wird: Systemeinstellungen > Datenschutz & Sicherheit > "Dennoch öffnen".
-3. Es öffnet sich ein Terminal-Fenster (bitte offen lassen) und kurz danach Ihr Browser mit dem Programm.
-   Der erste Start dauert etwas länger.
-4. Beenden: im Programm oben rechts auf "Beenden" klicken oder das Terminal-Fenster schließen.
+Installieren
+1. Ziehen Sie das Symbol "PP-Inkognito" im geöffneten Fenster auf den Ordner "Programme".
+2. Öffnen Sie "Programme" und starten Sie PP-Inkognito mit einem Rechtsklick > "Öffnen" (nur beim ersten Mal nötig).
 
-Alles läuft nur auf Ihrem Rechner, ohne Internet. Ihre Ergebnisse liegen im Ordner Dokumente/Anonymisierungen.
+Warum die Sicherheitsmeldung?
+Das Programm ist kostenlos und nicht über den Apple-Entwicklerdienst signiert (der kostet Geld pro Jahr). Deshalb sagt macOS
+beim ersten Start "kann nicht geöffnet werden" oder "nicht verifizierter Entwickler". Das Programm ist nicht beschädigt.
+- Rechtsklick auf PP-Inkognito > "Öffnen" > im Fenster nochmals "Öffnen".
+- Wenn "Öffnen" nicht angeboten wird: Systemeinstellungen > Datenschutz & Sicherheit, ganz nach unten scrollen, bei der Meldung
+  zu PP-Inkognito auf "Dennoch öffnen" klicken und mit Ihrem Passwort bestätigen.
+Danach startet es wie jedes andere Programm per Doppelklick.
+
+Arbeiten
+Nach dem Start öffnet sich Ihr Browser mit dem Programm (der erste Start dauert etwas länger). Es läuft nur auf Ihrem Rechner,
+ohne Internet. Ergebnisse liegen im Ordner Dokumente/Anonymisierungen. Beenden: im Programm oben rechts auf "Beenden" klicken.
 Hinweise zum Datenschutz stehen im Programm unten unter "Datenschutz".
 
 PerformPlus GmbH · Kontakt: https://performplus.de/kontakt/
