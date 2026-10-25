@@ -292,6 +292,7 @@ code{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding
   <p>Dieses Tool arbeitet vollständig lokal. Es sendet nichts ins Internet und nutzt keine Cloud-KI.</p>
   <p><strong>Die Erkennung ist nicht zu 100 % zuverlässig.</strong> Es können Angaben übersehen oder falsch markiert werden. Prüfen Sie jede Ausgabe vollständig, bevor Sie sie weitergeben.</p>
   <p>Auch Bilder, Dateinamen und Metadaten können Hinweise auf Personen enthalten. Pseudonymisierte Daten bleiben personenbezogen, solange die Schlüsseldatei existiert. Sie enthält die echten Angaben im Klartext: Laden Sie sie nie in eine KI hoch und bewahren Sie sie geschützt auf. Für die Einhaltung des Datenschutzes sind Sie selbst verantwortlich.</p>
+  <p><strong>Das Tool öffnet sich im Browser, läuft aber nur auf Ihrem Rechner.</strong> Der Browser selbst sendet Ihre Dokumente nicht von sich aus ins Internet. Browser-Erweiterungen und KI-Funktionen (z. B. Assistenten, Übersetzer, Gemini, Copilot) können Seiteninhalte aber mitlesen oder weitergeben. Schalten Sie diese für die Arbeit mit dem Tool aus oder nutzen Sie ein Privatfenster ohne Erweiterungen.</p>
   <label class="inline"><input type="checkbox" id="agree"> Ich habe das verstanden und prüfe jedes Ergebnis.</label>
   <p style="text-align:right"><button id="agreeBtn" disabled>Weiter</button></p>
 </dialog>
@@ -381,7 +382,8 @@ function buildInfo() {
     "<h3>Was das Programm tut und nicht tut</h3><ul>" +
     "<li>Es verarbeitet Ihre Dateien ausschließlich lokal. Es braucht keine Internetverbindung, hat keine Anmeldung und keine Nutzerkonten.</li>" +
     "<li>Es sendet keine Dateien, Texte, Nutzungsdaten oder Fehlerberichte an uns oder an Dritte (keine Telemetrie, kein Tracking, keine Werbung, keine Cloud-KI). Die Texterkennung übernimmt ein kleines Sprachmodell, das auf Ihrem Rechner liegt.</li>" +
-    "<li>Das Programm ist nur von diesem Rechner aus erreichbar (Adresse 127.0.0.1). Im Browser wird ausschließlich ein technisch nötiges Zugangs-Cookie gesetzt, das andere Webseiten am Zugriff hindert.</li></ul>" +
+    "<li>Das Programm ist nur von diesem Rechner aus erreichbar (Adresse 127.0.0.1). Im Browser wird ausschließlich ein technisch nötiges Zugangs-Cookie gesetzt, das andere Webseiten am Zugriff hindert.</li>" +
+    "<li>Das Programm wird in Ihrem Browser angezeigt. Der Browser sendet Ihre Dokumente nicht von sich aus ins Internet, Erweiterungen und KI-Funktionen des Browsers (Assistenten, Übersetzer, Gemini, Copilot) können Seiteninhalte aber mitlesen. Schalten Sie diese aus oder nutzen Sie ein Privatfenster ohne Erweiterungen. Die Adresse mit dem Zugangs-Token kann im Browserverlauf stehen; Dokumentinhalte werden nicht zwischengespeichert.</li></ul>" +
     "<h3>Was auf Ihrem Rechner gespeichert wird</h3><ul>" +
     "<li>Im Ablageordner <code>" + esc(CFG.out_dir) + "</code>: pro Titel die hochgeladenen <strong>Originale</strong>, der <strong>Bearbeitungsstand</strong>, die anonymisierten Dokumente, zurückgespielte Dokumente und die <strong>Schlüsseldatei</strong>.</li>" +
     "<li>Die Originale und die Schlüsseldatei enthalten die <strong>echten personenbezogenen Daten im Klartext</strong>.</li>" +

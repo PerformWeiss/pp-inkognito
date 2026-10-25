@@ -63,8 +63,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # feste Dateinamen, damit .../releases/latest/download/<Name> immer die neueste Version liefert
+          mv artifacts/*-Mac.dmg artifacts/PP-Inkognito-Mac.dmg
+          mv artifacts/*-Windows-Setup.exe artifacts/PP-Inkognito-Windows-Setup.exe
           gh release create "${{ github.ref_name }}" artifacts/* \
             --repo "${{ github.repository }}" \
-            --title "PP-Inkognito ${{ github.ref_name }} (Beta)" \
-            --notes "**Beta-Version.** Bitte beim ersten Start die Anleitung beachten, denn das Programm ist nicht signiert und Mac und Windows warnen beim ersten Öffnen. **Mac:** .dmg öffnen, PP-Inkognito in den Ordner Programme ziehen, doppelklicken, auf Fertig klicken, dann Systemeinstellungen > Datenschutz & Sicherheit > ganz nach unten > Dennoch öffnen. **Windows:** Setup-Datei ausführen, bei der Warnung Weitere Informationen > Trotzdem ausführen. Die genaue Schritt-für-Schritt-Anleitung steht in der README und in der Datei LIES-MICH.txt. Die Erkennung ist nicht zu 100 % zuverlässig: bitte jedes Ergebnis prüfen." \
-            --prerelease
+            --latest \
+            --title "PP-Inkognito ${{ github.ref_name }}" \
+            --notes "**Beta-Version.** Bitte beim ersten Start die Anleitung beachten, denn das Programm ist nicht signiert und Mac und Windows warnen beim ersten Öffnen. **Mac:** .dmg öffnen, PP-Inkognito in den Ordner Programme ziehen, doppelklicken, auf Fertig klicken, dann Systemeinstellungen > Datenschutz & Sicherheit > ganz nach unten > Dennoch öffnen. **Windows:** Setup-Datei ausführen, bei der Warnung Weitere Informationen > Trotzdem ausführen. Die genaue Schritt-für-Schritt-Anleitung steht in der README und in der Datei LIES-MICH.txt. Die Erkennung ist nicht zu 100 % zuverlässig: bitte jedes Ergebnis prüfen."

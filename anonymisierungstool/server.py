@@ -290,7 +290,7 @@ def _pdf(doc_id):
 
 
 def _png(data):
-    return Response(data, mimetype="image/png", headers={"Cache-Control": "private, max-age=3600"})
+    return Response(data, mimetype="image/png", headers={"Cache-Control": "no-store"})
 
 
 @app.get("/api/doc/<doc_id>/page/<int:n>.png")

@@ -25,11 +25,11 @@ der Grund, warum Ihre Unterlagen den Rechner nicht verlassen müssen.
 
 ## Installation und erster Start (bitte zuerst lesen)
 
-Laden Sie unter [Releases](../../releases) die Datei für Ihr System herunter. Das Programm ist kostenlos und **nicht signiert**
+Laden Sie unter [Releases](../../releases/latest) die Datei für Ihr System herunter (direkte Links, immer die neueste Version: [Mac](../../releases/latest/download/PP-Inkognito-Mac.dmg), [Windows](../../releases/latest/download/PP-Inkognito-Windows-Setup.exe)). Das Programm ist kostenlos und **nicht signiert**
 (Apple und Microsoft verlangen dafür ein kostenpflichtiges Entwicklerkonto). Deshalb warnen **Mac und Windows beim ersten Start**.
 Das Programm ist nicht beschädigt. So geben Sie es einmalig frei:
 
-### Mac: `PP-Inkognito-…-Mac.dmg`
+### Mac: `PP-Inkognito-Mac.dmg`
 
 1. Die `.dmg`-Datei öffnen und das Symbol **PP-Inkognito** auf den Ordner **Programme** ziehen. Danach das Fenster auswerfen.
 2. In **Programme** auf **PP-Inkognito** doppelklicken. Es erscheint die Meldung *„PP-Inkognito nicht geöffnet – Apple konnte nicht überprüfen, ob PP-Inkognito frei von Schadsoftware ist“*. Klicken Sie auf **Fertig** (nicht auf „In den Papierkorb legen“).
@@ -40,7 +40,7 @@ Das Programm ist nicht beschädigt. So geben Sie es einmalig frei:
 Das geht nur einmal. Der Hinweis in den Systemeinstellungen erscheint erst nach einem Öffnen-Versuch (Schritt 2) und bleibt etwa eine Stunde.
 Ab dem zweiten Start öffnet sich das Programm wie jedes andere. Beim allerersten Start dauert es etwas länger, dann öffnet sich Ihr Browser.
 
-### Windows: `PP-Inkognito-…-Windows-Setup.exe`
+### Windows: `PP-Inkognito-Windows-Setup.exe`
 
 1. Die Setup-Datei doppelklicken. Erscheint *„Der Computer wurde durch Windows geschützt“*, klicken Sie auf **Weitere Informationen** und dann auf **Trotzdem ausführen**.
 2. Dem Installationsassistenten folgen. PP-Inkognito finden Sie danach im Startmenü.
