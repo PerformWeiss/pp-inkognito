@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="12" fill="#000"/>
+  <!-- Rechtes P (Plus, Türkis): Stamm von x=32 bis 38, Bogen nach rechts -->
+  <g fill="none" stroke="#1ec2d9" stroke-width="6.5" stroke-linejoin="miter">
+    <path d="M35.25 51V14.5"/>
+    <path d="M35.25 17.75H43.5A8.5 8.5 0 0 1 43.5 34.75H35.25"/>
+  </g>
+  <!-- Linkes P (Perform, Weiß): gespiegelt, Rücken an Rücken am gemeinsamen Mittelstrich -->
+  <g fill="none" stroke="#fff" stroke-width="6.5" stroke-linejoin="miter" transform="translate(64 0) scale(-1 1)">
+    <path d="M35.25 51V14.5"/>
+    <path d="M35.25 17.75H43.5A8.5 8.5 0 0 1 43.5 34.75H35.25"/>
+  </g>
+</svg>

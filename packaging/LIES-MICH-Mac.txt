@@ -1,0 +1,17 @@
+PP-Inkognito (Mac)
+==================
+
+Start
+1. Den entpackten Ordner "PP-Inkognito" an einen festen Ort legen (z. B. Programme oder Dokumente).
+2. In dem Ordner die Datei "PP-Inkognito" per Rechtsklick > "Öffnen" starten.
+   Beim ersten Start meldet macOS, dass die Entwicklerin nicht verifiziert ist. Bestätigen Sie mit "Öffnen".
+   Falls "Öffnen" nicht angeboten wird: Systemeinstellungen > Datenschutz & Sicherheit > "Dennoch öffnen".
+3. Es öffnet sich ein Terminal-Fenster (bitte offen lassen) und kurz danach Ihr Browser mit dem Programm.
+   Der erste Start dauert etwas länger.
+4. Beenden: im Programm oben rechts auf "Beenden" klicken oder das Terminal-Fenster schließen.
+
+Alles läuft nur auf Ihrem Rechner, ohne Internet. Ihre Ergebnisse liegen im Ordner Dokumente/Anonymisierungen.
+Hinweise zum Datenschutz stehen im Programm unten unter "Datenschutz".
+
+PerformPlus GmbH · Kontakt: https://performplus.de/kontakt/
+Lizenz: AGPL-3.0 (siehe LICENSE.txt)

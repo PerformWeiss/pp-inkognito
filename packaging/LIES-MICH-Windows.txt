@@ -1,0 +1,17 @@
+PP-Inkognito (Windows)
+======================
+
+Start
+1. Die ZIP-Datei vollständig entpacken (Rechtsklick > "Alle extrahieren") und den Ordner "PP-Inkognito" an einen festen Ort legen.
+2. In dem Ordner "PP-Inkognito.exe" doppelklicken.
+   Beim ersten Start meldet Windows evtl. "Der Computer wurde durch Windows geschützt". Klicken Sie auf "Weitere Informationen"
+   und dann auf "Trotzdem ausführen". Das Programm ist noch nicht signiert.
+3. Es öffnet sich ein schwarzes Fenster (bitte offen lassen) und kurz danach Ihr Browser mit dem Programm.
+   Der erste Start dauert etwas länger.
+4. Beenden: im Programm oben rechts auf "Beenden" klicken oder das schwarze Fenster schließen.
+
+Alles läuft nur auf Ihrem Rechner, ohne Internet. Ihre Ergebnisse liegen im Ordner Dokumente\Anonymisierungen.
+Hinweise zum Datenschutz stehen im Programm unten unter "Datenschutz".
+
+PerformPlus GmbH · Kontakt: https://performplus.de/kontakt/
+Lizenz: AGPL-3.0 (siehe LICENSE.txt)

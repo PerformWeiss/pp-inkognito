@@ -1,0 +1,1235 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<title>PP-Inkognito</title>
+<style>
+:root{--bg:#f6f7f9;--card:#fff;--ink:#1b2430;--mute:#5d6b7c;--line:#dde2e8;--acc:#1f5fbf;--accink:#fff;--warn:#fff4d6;--warnline:#e6c86b;--bad:#b3261e;--ok:#1d7a46;
+--c-name:#ffd9a8;--c-geburtsdatum:#ffc9d6;--c-adresse:#d6e8ff;--c-email:#cfeedd;--c-telefon:#cfeedd;--c-iban:#e4d6ff;--c-url:#e4d6ff;--c-firma:#ffeaa0;--c-projekt:#e3ecb4;--c-ort:#d3f0f0;--c-sonstiges:#e3e3e3}
+@media (prefers-color-scheme:dark){:root{--bg:#12161c;--card:#1b222b;--ink:#e8edf3;--mute:#9aa7b6;--line:#2c3744;--acc:#6aa2ff;--accink:#08111f;--warn:#3a3114;--warnline:#7a6420;--bad:#ff8a80;--ok:#6fd49a;
+--c-name:#6b4a1c;--c-geburtsdatum:#6b2a3d;--c-adresse:#1f3f6b;--c-email:#1f5a3a;--c-telefon:#1f5a3a;--c-iban:#473370;--c-url:#473370;--c-firma:#6b5a14;--c-projekt:#4a5a1c;--c-ort:#1d5a5a;--c-sonstiges:#444}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:12px max(24px,calc((100% - 1352px) / 2));border-bottom:1px solid var(--line);background:var(--card);display:flex;gap:16px;align-items:stretch;justify-content:space-between;flex-wrap:wrap}
+h1{font-size:20px;margin:0}
+.sub{color:var(--mute);font-size:13px}
+.badge{display:inline-block;border:1px solid var(--ok);color:var(--ok);border-radius:99px;padding:1px 10px;font-size:12px}
+main{max-width:1400px;margin:0 auto;padding:20px 24px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+button,select,input[type=text],input[type=password]{font:inherit;color:inherit}
+button{background:var(--acc);color:var(--accink);border:0;border-radius:8px;padding:8px 14px;cursor:pointer}
+button.sec{background:transparent;color:var(--ink);border:1px solid var(--line)}
+button:disabled{opacity:.5;cursor:not-allowed}
+input[type=text],input[type=password],select{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
+#drop{border:2px dashed var(--line);border-radius:12px;padding:48px 20px;text-align:center;color:var(--mute)}
+#drop.over{border-color:var(--acc);background:rgba(31,95,191,.06)}
+.warn{background:var(--warn);border:1px solid var(--warnline);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:14px}
+.err{color:var(--bad);margin-top:8px}
+#work{display:none;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:16px;margin-top:16px}
+@media (max-width:900px){#work{grid-template-columns:1fr}}
+#doc{white-space:pre-wrap;word-break:break-word;max-height:75vh;overflow:auto;font-size:14px;line-height:1.6}
+#doc mark{border-radius:3px;padding:0 1px;color:inherit}
+#doc.word{white-space:normal;max-height:80vh;background:#dfe3e8;padding:10px;font-size:inherit;line-height:normal}
+.flash{outline:3px solid var(--acc)!important;outline-offset:2px;animation:flashfade 1.8s ease-out}
+@keyframes flashfade{0%{box-shadow:0 0 0 8px rgba(31,95,191,.35)}100%{box-shadow:0 0 0 0 rgba(31,95,191,0)}}
+.t .tx{cursor:pointer}
+.catsel{font-size:12px;padding:1px 3px;margin-top:3px;max-width:100%}
+.kinote{font-size:12.5px;line-height:1.4;color:var(--mute);border-left:3px solid var(--acc);padding:2px 10px;margin:8px 0}
+.kinote strong{color:var(--ink)}
+.wpage{background:#fff;color:#000;box-sizing:border-box;margin:0 auto;box-shadow:0 1px 6px rgba(0,0,0,.3);min-height:300px;line-height:1.15;overflow-wrap:anywhere}
+.wpage p{white-space:pre-wrap;tab-size:6}
+.wpage img{max-width:100%;height:auto}
+.wpage .tbx{border:1px dashed #999;padding:4px;margin:2px 0}
+.wpage .pb{border:0;border-top:1px dashed #bbb;margin:12px 0}
+.wpage .whead,.wpage .wfoot{opacity:.55;border-bottom:1px dashed #ccc;margin-bottom:6px}
+.wpage .wfoot{border:0;border-top:1px dashed #ccc;margin:6px 0 0}
+#doc mark.off{background:transparent!important;border-bottom:2px dotted var(--mute)}
+.cat{margin:10px 0 2px;font-weight:600;font-size:13px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr) repeat(3,auto);gap:8px;align-items:center;padding:4px 0;border-bottom:1px solid var(--line)}
+.row .t{word-break:break-word}
+.row .meta{font-size:12px;color:var(--mute)}
+.row select{padding:2px 4px;font-size:13px;max-width:100%}
+.row select.date{grid-column:2 / -1;justify-self:start}
+.tag{font-size:11px;border:1px solid var(--warnline);background:var(--warn);border-radius:99px;padding:0 6px;margin-left:6px}
+.opts{display:grid;gap:10px;margin-top:14px}
+.opts label{display:grid;gap:3px;font-size:13px;color:var(--mute)}
+.inline{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#bar{position:fixed;display:none;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;box-shadow:0 6px 24px rgba(0,0,0,.2);gap:6px;align-items:center;flex-wrap:wrap;max-width:360px}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);max-width:560px;padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:20px}
+a{color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid var(--line);padding:4px 6px;text-align:left}
+mark{cursor:pointer}
+#pop{position:fixed;display:none;z-index:6;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px;box-shadow:0 6px 24px rgba(0,0,0,.2);flex-direction:column;gap:8px;width:280px}
+#pop .t{font-weight:600;overflow-wrap:anywhere}
+#finds .pv{margin-top:2px;display:flex;gap:4px;align-items:center;font-size:12px;color:var(--mute)}
+#finds .pseudo{flex:1;min-width:0;padding:1px 6px;font-size:13px;border-style:dashed;font-style:italic}
+#finds .pseudo:disabled{background:transparent;border-color:transparent;color:var(--mute)}
+#pages{max-height:80vh;overflow:auto}
+.pg{position:relative;margin:0 auto 12px;border:1px solid var(--line);background:#fff;line-height:0;max-width:820px}
+.pg img{width:100%;display:block;user-select:none;-webkit-user-drag:none}
+.pg .ov{position:absolute;inset:0;touch-action:none}
+.pg .ov.draw{cursor:crosshair}
+.pg .ov.draw .mk{pointer-events:none}
+.pg svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.mk{position:absolute;border-radius:2px;cursor:pointer;opacity:.55;outline:1px solid rgba(0,0,0,.4)}
+.mk.off{background:transparent!important;outline:2px dotted #555;opacity:1}
+.rubber{position:absolute;border:2px dashed var(--acc);background:rgba(31,95,191,.14);pointer-events:none}
+button.active{outline:2px solid var(--acc);outline-offset:1px}
+header .logo{height:60px;width:auto;border-radius:6px;display:block}
+footer a{color:var(--mute)}
+footer .links{margin-bottom:6px}
+footer .links a{margin:0 8px;white-space:nowrap}
+dialog.wide{max-width:640px}
+dialog h2{margin-top:0}
+header .hright{display:grid;gap:8px;justify-items:end;max-width:420px}
+.localbox{font-size:12px;line-height:1.4;border:1px solid var(--ok);border-radius:8px;padding:6px 10px;color:var(--ink);background:transparent;text-align:left}
+.localbox strong{color:var(--ok);display:block}
+button.small{padding:3px 10px;font-size:13px}
+nav.tabs{display:flex;gap:8px;padding:12px 24px 0;max-width:1400px;margin:0 auto}
+nav.tabs{gap:4px;border-bottom:1px solid var(--line);padding-bottom:0}
+nav.tabs button{font-size:14px;background:transparent;color:var(--mute);border:1px solid transparent;border-bottom:0;border-radius:8px 8px 0 0;padding:8px 16px;margin-bottom:-1px}
+nav.tabs button:hover{color:var(--ink);background:var(--card)}
+nav.tabs button.on{background:var(--card);color:var(--ink);font-weight:600;border-color:var(--line);box-shadow:inset 0 3px 0 var(--acc)}
+.crumbs{margin:0 0 10px;font-size:14px}
+.place{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+code{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:12px;overflow-wrap:anywhere}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-top:14px}
+.tcard strong{padding-right:34px}
+.trash{background:transparent;border:1px solid var(--line);color:var(--mute);padding:2px 8px;border-radius:6px;font-size:14px;line-height:1.4}
+.trash:hover{border-color:var(--bad);color:var(--bad)}
+.tcard{position:relative;display:grid;gap:3px;text-align:left;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:10px;cursor:pointer;color:var(--ink)}
+.tcard:hover{border-color:var(--acc)}
+.strip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.chip{display:flex;gap:8px;align-items:center;max-width:260px;padding:5px 10px 5px 5px;background:var(--card);border:1px solid var(--line);border-radius:10px;cursor:pointer;color:var(--ink);text-align:left}
+.chip.active{outline:2px solid var(--acc)}
+.frow2 .thumb{width:36px;height:50px;object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:3px;background:#fff}
+.frow.orow{grid-template-columns:44px 1fr auto}
+.orow .thumb{width:44px;height:60px;object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:3px;background:#fff}
+.chip .thumb{width:34px;height:46px;object-fit:cover;object-position:top;border:1px solid var(--line);border-radius:3px;background:#fff;flex:none}
+.chip .ico{width:34px;height:46px;flex:none;display:grid;place-items:center;border:1px solid var(--line);border-radius:3px;font-size:10px;color:var(--mute);background:var(--bg)}
+.chip .cn{display:block;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:170px}
+.chip .cs{display:block;font-size:11px;color:var(--mute)}
+.chip .cs.ok{color:var(--ok)}
+.chip .cs.bad{color:var(--bad)}
+.frow{display:grid;grid-template-columns:190px 1fr auto;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+</style>
+</head>
+<body>
+<header>
+  <div class="inline" style="gap:14px;flex-wrap:nowrap;align-self:stretch;align-items:center">
+    <a href="#" id="aboutLogo" title="Über PerformPlus"><img src="/static/logo.png" alt="PerformPlus – we empower people." class="logo"></a>
+    <div>
+      <h1 id="appname">PP-Inkognito</h1>
+      <div class="sub">Bewerbungsunterlagen lokal anonymisieren und pseudonymisieren</div>
+    </div>
+  </div>
+  <div class="hright">
+    <div class="inline" style="justify-content:flex-end">
+      <button class="sec small" id="dictBtn" title="Wörterbuch: Begriffe, die sich das Tool gemerkt hat und künftig automatisch findet (z. B. ein Name oder eine Firma). Es liegt nur auf diesem Rechner.">Wörterbuch</button>
+      <button class="sec small" id="aboutBtn" title="Über PerformPlus und dieses Tool">Über uns</button>
+      <button class="sec small" id="quitBtn" title="Beendet das Programm und entfernt die geladenen Dokumente aus dem Arbeitsspeicher.">Beenden</button>
+    </div>
+    <div class="localbox" id="localbox">
+      <strong>Läuft nur auf diesem Rechner. Keine Internetverbindung.</strong>
+      Ihre Dateien bleiben hier. Die Erkennung übernimmt eine kleine KI, die lokal auf diesem Rechner gespeichert ist. Sie arbeitet ohne Cloud und gibt keine Daten weiter, um Ihre Daten zu schützen.
+    </div>
+  </div>
+</header>
+<nav class="tabs">
+  <button class="on" id="tabL" title="Alle Titel und Dokumente, die Sie mit diesem Programm erstellt haben, und wo sie gespeichert sind.">Ablage</button>
+  <button id="tabA" title="Prüfen, was ersetzt werden soll, und die anonymisierte Fassung erstellen. Erst danach geben Sie die Dokumente in eine KI.">1 · Anonymisierung prüfen</button>
+  <button id="tabR" title="Für Dokumente, die Sie von der KI zurückbekommen haben: Setzt die persönlichen Daten wieder ein.">2 · Persönliche Daten wieder einsetzen</button>
+</nav>
+
+<main>
+<div id="viewLib">
+  <div class="inline" style="justify-content:space-between;align-items:flex-end;gap:12px">
+    <button id="newBtn" title="Neue Dokumente unter einem neuen Titel anonymisieren">+ Neue Anonymisierung</button>
+    <span class="sub" id="libCount"></span>
+  </div>
+  <div id="libGrid" class="grid" style="margin-top:12px"></div>
+  <div class="card" style="margin-top:22px">
+    <h2 style="margin:0 0 4px;font-size:16px">Meine Ablage</h2>
+    <p class="sub" style="margin:0 0 8px">Pro Titel ein Ordner mit Originalen, anonymisierten Dokumenten und Schlüsseldatei. Ein Titel steht für einen Fall oder eine Person, z. B. „Bewerbung Mustermann“. Alles wird automatisch gespeichert.</p>
+    <div class="place">
+      <span class="sub">Ablageort:</span> <code id="libPath"></code>
+      <button class="sec small" id="libOpen" title="Öffnet den Ablageort im Finder bzw. Explorer">Ordner öffnen</button>
+      <button class="sec small" id="libChange" title="Einen anderen Ordner als Ablageort verwenden, z. B. auf einem Laufwerk des Trägers">Ablageort ändern …</button>
+    </div>
+    <div id="libBox" style="display:none">
+      <label class="opts" style="margin-top:10px">Neuer Ablageort (vollständiger Pfad)
+        <input type="text" id="libInput" placeholder="/Users/name/Dokumente/Anonymisierungen">
+      </label>
+      <div class="inline" style="margin-top:8px">
+        <button class="sec small" id="libChoose">Ordner auswählen …</button>
+        <button class="small" id="libApply">Übernehmen</button>
+        <button class="sec small" id="libReset" title="Zurück zum Standardordner im Ordner Dokumente">Standard wiederherstellen</button>
+      </div>
+      <div class="sub">Bereits vorhandene Titel werden nicht verschoben. Wer den Ablageort wechselt, sieht dort nur die Titel, die in diesem Ordner liegen.</div>
+      <div id="libMsg"></div>
+    </div>
+  </div>
+</div>
+<div id="viewT" style="display:none">
+  <div class="crumbs"><a href="#" id="tBack">‹ Ablage</a></div>
+  <div class="card">
+    <div class="inline" style="justify-content:space-between">
+      <h2 id="tName" style="margin:0"></h2>
+      <span class="inline">
+        <button id="tAdd" title="Weitere Dokumente zu diesem Titel anonymisieren. Sie bekommen dieselben erfundenen Namen.">+ Dokumente hinzufügen</button>
+        <button class="sec" id="tRestore" title="Ein von der KI überarbeitetes Dokument mit den persönlichen Daten dieses Titels versehen">Persönliche Daten wieder einsetzen</button>
+        <button class="sec" id="tFolder">Ordner öffnen</button>
+      </span>
+    </div>
+    <p class="sub">Gespeichert in: <code id="tPath"></code></p>
+    <div id="tFiles"></div>
+    <div id="tOrig"></div>
+  </div>
+</div>
+
+<div id="viewA" style="display:none">
+  <div class="crumbs" id="aCrumb"></div>
+  <div id="strip" class="strip" style="display:none"></div>
+  <div class="card" id="intro">
+    <label class="opts" style="margin:0 0 14px">Titel der Anonymisierung
+      <input type="text" id="title" list="titles" placeholder="z. B. Bewerbung Mustermann" autocomplete="off">
+      <span class="sub">Alle Dokumente mit demselben Titel teilen sich eine Schlüsseldatei und bekommen dieselben Pseudonyme. Der Titel ist zugleich der Ordnername. Einen vorhandenen Titel wählen, um weitere Dokumente hinzuzufügen.</span>
+    </label>
+    <datalist id="titles"></datalist>
+    <div id="drop">
+      <p><strong>Dateien hier ablegen</strong> oder <button id="pick">Dateien auswählen</button></p>
+      <p class="sub">Möglich sind PDF mit lesbarem Text (kein Scan), Word (.docx) und Text. <strong>PDFs lassen sich derzeit am einfachsten bearbeiten.</strong> Word-Dateien funktionieren genauso gut und werden in der Regel sauber übertragen, die Formatierung ändert sich dabei aber leicht. Gescannte Seiten erkennt das Tool nicht, sie lassen sich aber von Hand schwärzen. Die Ausgabe hat immer das Format der Datei, die Sie laden. Alles bleibt auf diesem Rechner.</p>
+      <input type="file" id="file" accept=".docx,.pdf,.txt,.md" multiple hidden>
+    </div>
+    <div id="upmsg"></div>
+  </div>
+
+  <div id="work">
+    <section class="card">
+      <div class="inline" style="justify-content:space-between">
+        <span><strong id="fname">Dokument</strong> <span class="sub" id="saveInfo"></span></span>
+        <span class="sub" id="hint">Etwas übersehen? Text markieren, um die Stelle aufzunehmen. Auf eine Markierung klicken, um sie zu ändern.</span>
+      </div>
+      <div class="kinote" id="kiNote"><strong>Für die Arbeit mit einer KI, nicht zur Weitergabe.</strong> Die anonymisierte Datei muss nicht aussehen wie das Original: Layout und Schrift können leicht abweichen. Entscheidend ist, dass keine persönlichen Daten mehr darin stehen.</div>
+      <div id="viewbar" class="inline" style="display:none;margin:8px 0">
+        <button class="sec" id="vRes" style="display:none" title="So sieht die fertige Datei aus (aktueller Stand)">Ergebnis</button><button id="vOrig" title="Das hochgeladene Dokument mit den Markierungen">Original</button>
+      </div>
+      <div id="tools" class="inline" style="display:none;margin:0 0 8px">
+        <button id="tSel" title="Markierung anklicken = ändern. Wort anklicken oder über Wörter ziehen = neu markieren.">Markieren / ändern</button>
+        <span class="sub">Neu markieren als:</span>
+        <select id="frameCat" title="Kategorie für neu markierte Stellen"></select>
+        <span class="sub">Von Hand schwärzen:</span>
+        <button class="sec" id="tRect">Rechteck</button><button class="sec" id="tOval">Kreis</button><button class="sec" id="tPen">Stift</button>
+        <select id="penW" title="Strichstärke des Stifts"><option value="0.012">dünn</option><option value="0.025" selected>mittel</option><option value="0.05">dick</option></select>
+        <button class="sec" id="tUndo">Rückgängig</button>
+      </div>
+      <div id="warnings"></div>
+      <div id="doc"></div>
+      <div id="pages" style="display:none"></div>
+    </section>
+
+    <section class="card">
+      <div class="inline" style="justify-content:space-between"><strong>Gefundene Daten</strong><button id="exportTop">Anonymisierte Fassung erstellen</button></div>
+      <div class="sub">Haken setzen = wird ersetzt. Firmen und Orte sind nicht vorausgewählt.</div>
+      <label class="row" id="imgRow" style="margin-top:8px"><input type="checkbox" id="rmImg" checked>
+        <span class="t"><strong id="imgLabel">Foto / Bilder entfernen</strong><div class="meta">Entfernt Bewerbungsfoto und andere Bilder aus der Datei.</div></span></label>
+      <div id="finds"></div>
+
+      <div class="opts">
+        <div class="inline">
+          <input type="text" id="addText" placeholder="Eigenen Begriff ergänzen, z. B. Echtname" style="flex:1;min-width:160px">
+          <select id="addCat"></select>
+          <label class="inline" style="font-size:13px"><input type="checkbox" id="addRemember" checked> merken</label>
+          <button class="sec" id="addBtn">Hinzufügen</button>
+        </div>
+        <div class="sub">„merken“ speichert den Begriff dauerhaft im Wörterbuch auf diesem Rechner, auch wenn es ein echter Name ist. Für einen einmaligen Fall den Haken weglassen.</div>
+        <button id="exportBtn">Anonymisierte Fassung erstellen</button>
+        <div id="exmsg"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div id="viewR" style="display:none">
+  <div class="card">
+    <h2 style="margin-top:0">Persönliche Daten wieder einsetzen</h2>
+    <p class="sub">Ersetzt in einem überarbeiteten Dokument (zum Beispiel nach der Arbeit mit einer KI) die Pseudonyme wieder durch die persönlichen Daten. Dafür wählen Sie den Titel, unter dem Sie anonymisiert haben. Danach steht im Dokument wieder der echte Name statt des erfundenen.</p>
+    <div class="opts">
+      <label>Überarbeitetes Dokument (Word, PDF oder Text)
+        <input type="file" id="rFile" accept=".docx,.pdf,.txt,.md">
+      </label>
+      <label>Titel der Anonymisierung
+        <select id="rTitle"></select>
+      </label>
+      <details><summary class="sub" style="cursor:pointer">Oder eine Schlüsseldatei direkt auswählen</summary>
+        <label>Schlüsseldatei (.anonkey)
+          <input type="file" id="rKey" accept=".anonkey">
+        </label>
+      </details>
+      <button id="rBtn">Persönliche Daten wieder einsetzen</button>
+      <div id="rMsg"></div>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer id="foot"></footer>
+
+<div id="bar">
+  <select id="barCat"></select>
+  <label class="inline" style="font-size:13px"><input type="checkbox" id="barRemember" checked> merken</label>
+  <button id="barBtn">Markieren</button>
+</div>
+
+<div id="pop"></div>
+
+<dialog id="disclaimer">
+  <h2 style="margin-top:0">Bitte vorab lesen</h2>
+  <p>Dieses Tool arbeitet vollständig lokal. Es sendet nichts ins Internet und nutzt keine Cloud-KI.</p>
+  <p><strong>Die Erkennung ist nicht zu 100 % zuverlässig.</strong> Es können Angaben übersehen oder falsch markiert werden. Prüfen Sie jede Ausgabe vollständig, bevor Sie sie weitergeben.</p>
+  <p>Auch Bilder, Dateinamen und Metadaten können Hinweise auf Personen enthalten. Pseudonymisierte Daten bleiben personenbezogen, solange die Schlüsseldatei existiert. Sie enthält die echten Angaben im Klartext: Laden Sie sie nie in eine KI hoch und bewahren Sie sie geschützt auf. Für die Einhaltung des Datenschutzes sind Sie selbst verantwortlich.</p>
+  <label class="inline"><input type="checkbox" id="agree"> Ich habe das verstanden und prüfe jedes Ergebnis.</label>
+  <p style="text-align:right"><button id="agreeBtn" disabled>Weiter</button></p>
+</dialog>
+
+<dialog id="aboutDlg" class="wide">
+  <img src="/static/logo.png" alt="PerformPlus" class="logo" style="height:56px;margin-bottom:10px">
+  <h2>Über PerformPlus</h2>
+  <div id="aboutBody"></div>
+  <p style="text-align:right"><button class="sec" onclick="aboutDlg.close()">Schließen</button></p>
+</dialog>
+
+<dialog id="privDlg" class="wide">
+  <h2>Datenschutz bei <span class="appn"></span></h2>
+  <div id="privBody"></div>
+  <p style="text-align:right"><button class="sec" onclick="privDlg.close()">Schließen</button></p>
+</dialog>
+
+<dialog id="infoDlg" class="wide">
+  <h2>Hinweise und Haftung</h2>
+  <div id="infoBody"></div>
+  <p style="text-align:right"><button class="sec" onclick="infoDlg.close()">Schließen</button></p>
+</dialog>
+
+<dialog id="dictDlg">
+  <h2 style="margin-top:0">Wörterbuch</h2>
+  <p class="sub">Diese Begriffe werden in jedem Dokument automatisch gefunden. Sie liegen nur auf diesem Rechner. Auch echte Namen bleiben hier dauerhaft gespeichert, bis Sie sie mit „Löschen“ entfernen.</p>
+  <div id="dictList"></div>
+  <p style="text-align:right"><button class="sec" onclick="dictDlg.close()">Schließen</button></p>
+</dialog>
+
+<script>
+const $ = id => document.getElementById(id);
+const emptyDoc = () => ({docId: null, text: "", findings: [], title: "", pages: [], blackouts: [], name: ""});
+let CFG = null, S = emptyDoc(), OPEN = [], ACT = -1, CUR_T = "", LIB = null;   // OPEN: alle geladenen Dokumente der aktuellen Anonymisierung
+let VIEW = "text", TOOL = "sel";
+const PAGE_COLORS = {name: "#ff9f1c", geburtsdatum: "#ff6b8b", adresse: "#4d9de0", email: "#3bb273", telefon: "#3bb273", iban: "#9b5de5",
+  url: "#9b5de5", firma: "#f4d03f", projekt: "#a3c03a", ort: "#2ec4b6", sonstiges: "#9aa0a6"};
+const esc = s => s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rxEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const j = (url, opt) => fetch(url, opt).then(async r => { const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || "Fehler"); return d; });
+
+async function init() {
+  CFG = await j("/api/config");
+  $("appname").textContent = CFG.app;
+  document.title = CFG.app;
+  buildInfo();
+  for (const k of CFG.drop_order) {
+    for (const id of ["addCat", "barCat", "frameCat"]) $(id).add(new Option(CFG.categories[k], k));
+  }
+  loadTitles();
+  showTab("lib");
+  $("disclaimer").showModal();
+}
+const ext = (u, t) => "<a href='" + esc(u) + "' target='_blank' rel='noopener noreferrer'>" + esc(t) + "</a>";
+function buildInfo() {
+  const o = CFG.org_info, L = o.links;
+  $("foot").innerHTML = "<div class='links'><a href='#' id='fAbout'>Über uns</a><a href='#' id='fInfo'>Hinweise und Haftung</a>" +
+    "<a href='#' id='fPriv'>Datenschutz</a>" + ext(L.impressum, "Impressum") + ext(L.kontakt, "Kontakt") + "</div>" +
+    esc(CFG.app) + " " + esc(CFG.version) + " · ein kostenloses Angebot der " + ext(L.web, o.name) + " · " + esc(o.slogan) +
+    " · Open Source (" + esc(o.license) + ") · © " + o.year + " " + esc(o.name) + " · ohne Gewähr";
+  $("aboutBody").innerHTML =
+    "<p><strong>" + esc(o.name) + "</strong> – " + esc(o.slogan) + " Wir unterstützen Einzelpersonen und Teams bei der Kompetenzentwicklung und im Coaching, " +
+    "in der Laufbahnberatung (Übergänge und Neuorientierung) sowie bei Teamdynamik und Gründung.</p>" +
+    "<p><strong>" + esc(CFG.app) + "</strong> (PP = PerformPlus) ist ein kostenloses Angebot von uns für Beratende und Teilnehmende. Es anonymisiert oder pseudonymisiert " +
+    "Bewerbungsunterlagen, damit sie mit einer KI bearbeitet werden können, und setzt die echten Angaben danach wieder ein. " +
+    "Alles läuft nur auf Ihrem Rechner, ohne Internet und ohne Cloud-KI.</p>" +
+    "<p><strong>Warum ist das Programm so groß?</strong> In ihm steckt eine kleine lokale KI (ein Sprachmodell) zur Texterkennung. Sie läuft ausschließlich " +
+    "auf Ihrem Rechner und erkennt Namen, Orte und Firmen. Sie macht das Programm groß, ist aber der Grund, warum Ihre Unterlagen den Rechner nicht verlassen müssen.</p>" +
+    "<p><strong>Kontakt</strong><br>" + esc(o.name) + "<br>" + esc(o.address) + "<br>" + ext(L.web, L.web.replace("https://", "")) + " · " + ext(L.kontakt, "Kontaktseite") + "</p>" +
+    "<p class='sub'>" + ext(L.impressum, "Impressum") + " · " + ext(L.datenschutz, "Datenschutz") + " · Quelltext und Lizenz (" + esc(o.license) + "): siehe Projektseite auf GitHub</p>";
+  $("infoBody").innerHTML =
+    "<p><strong>Alles lokal.</strong> Dieses Tool sendet nichts ins Internet und nutzt keine Cloud-KI. Ihre Dateien bleiben auf diesem Rechner. " +
+    "Ergebnisse und Schlüsseldateien liegen im Ordner <code>" + esc(CFG.out_dir) + "</code>, das Wörterbuch unter <code>~/.anonymisierungstool</code>.</p>" +
+    "<p><strong>Die Erkennung ist nicht zu 100 % zuverlässig.</strong> Es können Angaben übersehen oder falsch markiert werden. Prüfen Sie jede Ausgabe vollständig, bevor Sie sie weitergeben.</p>" +
+    "<p>Auch Bilder, Dateinamen und Metadaten können Hinweise auf Personen enthalten. Gescannte Seiten werden nicht automatisch erkannt; schwärzen Sie sie von Hand.</p>" +
+    "<p><strong>Schlüsseldatei:</strong> Pseudonymisierte Daten bleiben personenbezogen, solange die Schlüsseldatei existiert. Sie enthält die echten Angaben im Klartext. Laden Sie sie nie in eine KI hoch und bewahren Sie sie geschützt auf.</p>" +
+    "<p><strong>Haftung:</strong> Das Tool wird kostenlos und ohne Gewähr bereitgestellt (" + esc(o.license) + "). Es ersetzt keine Rechts- oder Datenschutzberatung. " +
+    "Für die Einhaltung des Datenschutzes und die Prüfung der Ergebnisse sind Sie selbst verantwortlich.</p>" +
+    "<p class='sub'>" + esc(o.name) + " · " + esc(o.address) + " · " + ext(L.impressum, "Impressum") + " · " + ext(L.datenschutz, "Datenschutz") + "</p>";
+  for (const id of ["fAbout", "aboutBtn", "aboutLogo"]) $(id).onclick = e => { e.preventDefault(); $("aboutDlg").showModal(); };
+  $("fInfo").onclick = e => { e.preventDefault(); $("infoDlg").showModal(); };
+  $("fPriv").onclick = e => { e.preventDefault(); $("privDlg").showModal(); };
+  document.querySelectorAll(".appn").forEach(e => e.textContent = CFG.app);
+  $("privBody").innerHTML =
+    "<p><strong>Kurz gesagt:</strong> " + esc(CFG.app) + " läuft nur auf Ihrem Rechner. " + esc(o.name) + " erhält durch die Nutzung des Programms keine Daten von Ihnen oder aus Ihren Unterlagen.</p>" +
+    "<h3>Was das Programm tut und nicht tut</h3><ul>" +
+    "<li>Es verarbeitet Ihre Dateien ausschließlich lokal. Es braucht keine Internetverbindung, hat keine Anmeldung und keine Nutzerkonten.</li>" +
+    "<li>Es sendet keine Dateien, Texte, Nutzungsdaten oder Fehlerberichte an uns oder an Dritte (keine Telemetrie, kein Tracking, keine Werbung, keine Cloud-KI). Die Texterkennung übernimmt ein kleines Sprachmodell, das auf Ihrem Rechner liegt.</li>" +
+    "<li>Das Programm ist nur von diesem Rechner aus erreichbar (Adresse 127.0.0.1). Im Browser wird ausschließlich ein technisch nötiges Zugangs-Cookie gesetzt, das andere Webseiten am Zugriff hindert.</li></ul>" +
+    "<h3>Was auf Ihrem Rechner gespeichert wird</h3><ul>" +
+    "<li>Im Ablageordner <code>" + esc(CFG.out_dir) + "</code>: pro Titel die hochgeladenen <strong>Originale</strong>, der <strong>Bearbeitungsstand</strong>, die anonymisierten Dokumente, zurückgespielte Dokumente und die <strong>Schlüsseldatei</strong>.</li>" +
+    "<li>Die Originale und die Schlüsseldatei enthalten die <strong>echten personenbezogenen Daten im Klartext</strong>.</li>" +
+    "<li>Unter <code>~/.anonymisierungstool</code>: das Wörterbuch (kann echte Namen enthalten, die Sie dauerhaft gemerkt haben), Einstellungen und das Zugangs-Token.</li>" +
+    "<li>Sie können alles jederzeit löschen: in der Ablage mit dem Papierkorb-Symbol (endgültig, mit Rückfrage) oder im Dateimanager. Einträge des Wörterbuchs löschen Sie unter „Wörterbuch“.</li></ul>" +
+    "<h3>Ihre Verantwortung</h3><ul>" +
+    "<li>Wer mit dem Programm Unterlagen anderer Personen (z. B. Bewerbungen) verarbeitet, ist dafür selbst datenschutzrechtlich verantwortlich: Rechtsgrundlage, Information der Betroffenen, Löschfristen und Schutz des Rechners.</li>" +
+    "<li>Die Erkennung ist nicht zu 100 % zuverlässig. Prüfen Sie jede anonymisierte Fassung vollständig, bevor Sie sie in einen KI-Dienst oder an andere weitergeben.</li>" +
+    "<li>Pseudonymisierte Daten sind weiterhin personenbezogen, solange die Schlüsseldatei oder die Originale existieren. Laden Sie Schlüsseldatei und Originale <strong>nie</strong> in eine KI, einen Cloud-Speicher oder per E-Mail hoch.</li>" +
+    "<li>Geben Sie nur die anonymisierte Fassung weiter. Prüfen Sie auch Bilder, Dateinamen und Metadaten.</li>" +
+    "<li>Schützen Sie Ihren Rechner (Zugangssperre, Festplattenverschlüsselung) und sichern Sie die Ablage nur an geschützten Orten.</li></ul>" +
+    "<h3>Webseite und Download</h3>" +
+    "<p>Für den Besuch unserer Webseite und das Herunterladen des Programms gilt die " + ext(L.datenschutz, "Datenschutzerklärung von " + o.name) + ". Verantwortlicher: " + esc(o.name) + ", " + esc(o.address) + ", " + ext(L.impressum, "Impressum") + ". Fragen: über die " + ext(L.kontakt, "Kontaktseite") + ".</p>" +
+    "<p class='sub'>Dieser Hinweis beschreibt die Funktionsweise des Programms und ersetzt keine Rechts- oder Datenschutzberatung.</p>";
+}
+async function loadTitles() {
+  const d = await j("/api/titles").catch(() => ({titles: [], with_key: []}));
+  $("titles").innerHTML = d.titles.map(t => "<option value='" + esc(t) + "'>").join("");
+  $("rTitle").innerHTML = "";
+  for (const t of d.with_key) $("rTitle").add(new Option(t, t));
+  if (!d.with_key.length) $("rTitle").add(new Option("(noch kein Titel vorhanden)", ""));
+}
+$("agree").onchange = e => $("agreeBtn").disabled = !e.target.checked;
+$("agreeBtn").onclick = () => $("disclaimer").close();
+$("disclaimer").addEventListener("cancel", e => e.preventDefault());
+
+// ---- Upload
+const drop = $("drop");
+$("pick").onclick = () => $("file").click();
+$("file").onchange = e => { startFiles(e.target.files); e.target.value = ""; };
+["dragover", "dragenter"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+["dragleave", "drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+drop.addEventListener("drop", e => e.dataTransfer.files.length && startFiles(e.dataTransfer.files));
+const fmtDate = sec => new Date(sec * 1000).toLocaleString("de-DE", {dateStyle: "medium", timeStyle: "short"});
+const fmtSize = n => n < 1024 * 1024 ? Math.max(1, Math.round(n / 1024)) + " KB" : (n / 1048576).toFixed(1) + " MB";
+const post = (url, body) => j(url, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body || {})});
+
+// ---- Löschen (immer mit Rückfrage)
+async function delItem(kind, title, file, msg, after) {
+  if (!confirm(msg)) return;
+  try { await post("/api/delete", {title, kind, file}); purgeOpen(title, kind, file); if (after) after(); } catch (e) { alert(e.message); }
+}
+function purgeOpen(title, kind, file) {
+  const gone = d => d.title === title && (kind === "title" || (kind === "original" && (d.name === file || d.original === file)));
+  if (!OPEN.some(gone)) return;
+  const cur = OPEN[ACT];
+  OPEN = OPEN.filter(d => !gone(d));
+  if (!cur || gone(cur)) { ACT = -1; S = emptyDoc(); } else ACT = OPEN.indexOf(cur);
+  renderStrip();
+}
+
+// ---- Navigation: Ablage > Titel > Dokument
+function showTab(v) {
+  flushSaves();
+  for (const [k, id] of [["lib", "viewLib"], ["t", "viewT"], ["a", "viewA"], ["r", "viewR"]]) $(id).style.display = k === v ? "" : "none";
+  const tab = v === "t" ? "lib" : v;
+  for (const [k, id] of [["lib", "tabL"], ["a", "tabA"], ["r", "tabR"]]) $(id).className = k === tab ? "on" : "";
+  if (v === "lib") loadLib();
+  if (v === "r") loadTitles();
+  if (v === "a") updateCrumbs();
+}
+$("tabL").onclick = () => showTab("lib"); $("tabA").onclick = () => showTab("a"); $("tabR").onclick = () => showTab("r");
+$("tBack").onclick = e => { e.preventDefault(); showTab("lib"); };
+const unfinished = () => OPEN.some(d => !d.done && !d.pending && !d.error && !d.lazy);
+const confirmLeave = () => !unfinished() || confirm("Es gibt noch Dokumente, die nicht erstellt wurden. Trotzdem verlassen? Die geladenen Dokumente gehen dann verloren.");
+
+async function loadLib() {
+  let d;
+  try { d = await j("/api/library"); } catch (e) { $("libGrid").innerHTML = "<p class='err'>" + esc(e.message) + "</p>"; return; }
+  LIB = d;
+  $("libPath").textContent = d.out_dir;
+  $("libChange").style.display = d.locked ? "none" : "";
+  $("libInput").value = d.out_dir;
+  const grid = $("libGrid"); grid.innerHTML = "";
+  $("libCount").textContent = d.titles.length ? d.titles.length + (d.titles.length === 1 ? " Titel" : " Titel") : "";
+  if (!d.titles.length) grid.innerHTML = "<p class='sub'>Noch nichts abgelegt. Mit „Neue Anonymisierung“ geht es los.</p>";
+  for (const t of d.titles) {
+    const b = document.createElement("div"); b.className = "tcard"; b.tabIndex = 0; b.setAttribute("role", "button");
+    b.innerHTML = "<strong>" + esc(t.name) + "</strong><span class='sub'>" + t.docs + " anonymisiert" + (t.restored ? " · " + t.restored + " mit persönlichen Daten" : "") +
+      "</span><span class='sub'>zuletzt geändert " + esc(fmtDate(t.modified)) + "</span>" + (t.open ? "<span class='tag' style='justify-self:start'>" + t.open + " in Arbeit</span>" : "") + (t.has_key ? "" : "<span class='tag' style='justify-self:start'>ohne Schlüssel</span>");
+    b.onclick = () => openTitle(t.name);
+    b.onkeydown = e => { if (e.key === "Enter") openTitle(t.name); };
+    const tr = document.createElement("button"); tr.className = "trash"; tr.textContent = "🗑"; tr.title = "Titel löschen";
+    tr.style.cssText = "position:absolute;top:8px;right:8px";
+    tr.onclick = e => { e.stopPropagation(); delItem("title", t.name, "", "Titel „" + t.name + "“ endgültig löschen?\n\nDabei werden alle Originale, alle anonymisierten Dokumente und die Schlüsseldatei dieses Titels gelöscht. Das kann nicht rückgängig gemacht werden.", loadLib); };
+    b.append(tr);
+    grid.append(b);
+  }
+}
+$("libOpen").onclick = () => post("/api/open-folder").catch(e => alert(e.message));
+$("libChange").onclick = () => { $("libBox").style.display = $("libBox").style.display === "none" ? "" : "none"; };
+$("libChoose").onclick = async () => {
+  try { const d = await post("/api/library/choose"); if (d.path) $("libInput").value = d.path; } catch (e) { $("libMsg").innerHTML = "<p class='err'>" + esc(e.message) + "</p>"; }
+};
+async function setLocation(path) {
+  try { await post("/api/library/location", {path}); $("libMsg").innerHTML = "<p class='sub'>Ablageort geändert.</p>"; await loadLib(); await loadTitles(); }
+  catch (e) { $("libMsg").innerHTML = "<p class='err'>" + esc(e.message) + "</p>"; }
+}
+$("libApply").onclick = () => setLocation($("libInput").value);
+$("libReset").onclick = () => setLocation("");
+$("newBtn").onclick = () => startNew("");
+
+async function openTitle(name) {
+  CUR_T = name; $("tName").textContent = name; $("tFiles").innerHTML = "<p class='sub'>Wird geladen …</p>"; showTab("t");
+  try {
+    const d = await j("/api/title-files?title=" + encodeURIComponent(name));
+    $("tPath").textContent = d.folder;
+    const label = {anonymisiert: "Anonymisiert", wiederhergestellt: "Mit persönlichen Daten", schluessel: "Schlüsseldatei", andere: "Datei"};
+    $("tFiles").innerHTML = d.files.length ? "" : "<p class='sub'>In diesem Ordner liegt noch nichts.</p>";
+    for (const f of d.files) {
+      const r = document.createElement("div"); r.className = "frow";
+      const th = f.kind === "anonymisiert" || f.kind === "wiederhergestellt" ? "<img class='thumb' alt='' src='/api/original-thumb?sub=ergebnis&title=" + encodeURIComponent(name) + "&file=" + encodeURIComponent(f.name) + "' onerror=\"this.style.visibility='hidden'\">" : "";
+      r.className = "frow frow2";
+      r.innerHTML = "<span class='sub' style='display:flex;gap:8px;align-items:center'>" + th + label[f.kind] + "</span><span style='overflow-wrap:anywhere'>" + esc(f.name) + "<div class='meta sub'>" + esc(fmtSize(f.size)) + " · " + esc(fmtDate(f.modified)) +
+        (f.kind === "schluessel" ? " · enthält die echten Angaben im Klartext, nie in eine KI hochladen" : "") + "</div></span>";
+      const b = document.createElement("button"); b.className = "sec small"; b.textContent = "Öffnen";
+      b.onclick = () => post("/api/open-file", {title: name, file: f.name}).catch(e => alert(e.message));
+      const bx = document.createElement("span"); bx.className = "inline"; bx.append(b);
+      if (f.kind !== "schluessel" && f.kind !== "andere") {
+        const tr = document.createElement("button"); tr.className = "trash"; tr.textContent = "🗑"; tr.title = "Datei löschen";
+        tr.onclick = () => delItem("result", name, f.name, "„" + f.name + "“ endgültig löschen?\n\nDas Original und die Schlüsseldatei bleiben erhalten. Das kann nicht rückgängig gemacht werden.", () => openTitle(name));
+        bx.append(tr);
+      }
+      r.append(bx); $("tFiles").append(r);
+    }
+    const box = $("tOrig"); box.innerHTML = "";
+    if (d.originals.length) {
+      const open = d.originals.filter(o => !o.done).map(o => o.name);
+      box.innerHTML = "<h3 style='margin:18px 0 4px'>Originale und Bearbeitungsstand</h3><div class='sub'>Hier liegen die hochgeladenen Originale mit den echten Angaben. Laden Sie sie nie in eine KI hoch. " +
+        "Ihre Auswahl und Änderungen werden automatisch gespeichert, sodass Sie jederzeit weitermachen können.</div>";
+      if (open.length > 1) { const all = document.createElement("button"); all.className = "small"; all.style.margin = "8px 0"; all.textContent = "Alle " + open.length + " offenen weiter bearbeiten"; all.onclick = () => resumeOriginals(name, open); box.append(all); }
+      for (const o of d.originals) {
+        const r = document.createElement("div"); r.className = "frow";
+        r.className = "frow orow";
+        r.innerHTML = "<img class='thumb' alt='' src='/api/original-thumb?title=" + encodeURIComponent(name) + "&file=" + encodeURIComponent(o.name) + "'>" +
+          "<span style='overflow-wrap:anywhere'><span class='tag'>" + (o.done ? "fertig" : "in Arbeit") + "</span> " + esc(o.name) +
+          "<div class='meta sub'>" + esc(fmtSize(o.size)) + " · " + esc(fmtDate(o.modified)) + "</div></span>";
+        r.firstChild.onerror = function () { this.style.visibility = "hidden"; };
+        const go = document.createElement("button"); go.className = "small"; go.textContent = "Weiter bearbeiten"; go.onclick = () => resumeOriginals(name, [o.name]);
+        const op = document.createElement("button"); op.className = "sec small"; op.textContent = "Öffnen"; op.onclick = () => post("/api/open-file", {title: name, file: o.name, sub: "Originale"}).catch(e => alert(e.message));
+        const tr = document.createElement("button"); tr.className = "trash"; tr.textContent = "🗑"; tr.title = "Original löschen";
+        tr.onclick = () => delItem("original", name, o.name, "Original „" + o.name + "“ mit Bearbeitungsstand endgültig löschen?\n\nBereits erstellte anonymisierte Dateien und die Schlüsseldatei bleiben erhalten. Das Original lässt sich danach nicht mehr weiter bearbeiten. Das kann nicht rückgängig gemacht werden.", () => openTitle(name));
+        const w = document.createElement("span"); w.className = "inline"; w.append(go, op, tr); r.append(w);
+        box.append(r);
+      }
+    }
+  } catch (e) { $("tFiles").innerHTML = "<p class='err'>" + esc(e.message) + "</p>"; }
+}
+$("tAdd").onclick = () => startNew(CUR_T);
+$("tRestore").onclick = async () => { showTab("r"); await loadTitles(); $("rTitle").value = CUR_T; };
+$("tFolder").onclick = () => post("/api/open-folder", {title: CUR_T}).catch(e => alert(e.message));
+
+function startNew(title) {
+  if (!confirmLeave()) return;
+  OPEN = []; ACT = -1; S = emptyDoc();
+  $("title").value = title; $("title").readOnly = !!title;
+  $("intro").style.display = ""; $("work").style.display = "none"; $("upmsg").innerHTML = ""; $("exmsg").innerHTML = "";
+  renderStrip(); showTab("a");
+}
+function updateCrumbs() {
+  const t = OPEN.length ? OPEN[0].title : $("title").value.trim();
+  $("aCrumb").innerHTML = "<a href='#' data-go='lib'>‹ Ablage</a>" + (t ? " › <a href='#' data-go='title' data-t='" + esc(t) + "'>" + esc(t) + "</a>" : "") + (S.name ? " › " + esc(S.name) : "");
+}
+$("aCrumb").addEventListener("click", e => {
+  const a = e.target.closest("a"); if (!a) return;
+  e.preventDefault();
+  if (a.dataset.go === "lib") showTab("lib"); else if (a.dataset.go === "title") openTitle(a.dataset.t);
+});
+
+// ---- Upload (mehrere Dateien: Dokumentleiste)
+const newDocState = (name, title) => ({...emptyDoc(), name, title, pending: true, done: false, error: "", markKey: "", marks: [], rid: null, rm: true, exhtml: "", view: "text", warnings: [], original: null});
+function startFiles(files) {
+  files = Array.from(files);
+  if (!files.length) return;
+  const title = OPEN.length ? OPEN[0].title : $("title").value.trim();
+  if (!title) { $("upmsg").innerHTML = "<p class='err'>Bitte zuerst einen Titel für die Anonymisierung eingeben.</p>"; return; }
+  $("title").readOnly = true;
+  const added = files.map(f => ({file: f, st: newDocState(f.name, title)}));
+  for (const a of added) OPEN.push(a.st);
+  renderStrip();
+  (async () => { for (const a of added) await analyze(a.st, a.file); })();
+}
+async function resumeOriginals(title, names) {
+  if (!confirmLeave()) return;
+  let all = [];
+  try { all = (await j("/api/title-files?title=" + encodeURIComponent(title))).originals || []; } catch (e) { /* ohne Leiste weiterarbeiten */ }
+  OPEN = []; ACT = -1; S = emptyDoc();
+  $("title").value = title; $("title").readOnly = true;
+  $("intro").style.display = ""; $("work").style.display = "none"; $("upmsg").innerHTML = ""; $("exmsg").innerHTML = "";
+  showTab("a");
+  // Alle Originale des Titels stehen in der Dokumentleiste; nur die gewählten werden sofort geladen, die übrigen beim Anklicken
+  const order = all.length ? all.map(o => o.name).concat(names.filter(n => !all.some(o => o.name === n))) : names;
+  const added = [];
+  for (const n of order) {
+    if (names.includes(n)) { const st = newDocState(n, title); added.push(st); OPEN.push(st); }
+    else OPEN.push({...newDocState(n, title), pending: false, lazy: true, done: !!(all.find(o => o.name === n) || {}).done});
+  }
+  renderStrip();
+  (async () => { for (const st of added) await analyze(st, null); })();
+}
+async function analyze(st, file) {
+  if (ACT < 0) $("upmsg").innerHTML = "<p class='sub'>Wird analysiert … (beim ersten Mal kann das einige Sekunden dauern)</p>";
+  try {
+    let d;
+    if (file) { const fd = new FormData(); fd.append("file", file); fd.append("title", st.title); d = await j("/api/upload", {method: "POST", body: fd}); }
+    else d = await post("/api/resume", {title: st.title, original: st.name});   // gespeichertes Original samt Bearbeitungsstand
+    Object.assign(st, {docId: d.doc_id, text: d.text, kind: d.kind, images: d.images, pages: d.pages || [], warnings: d.warnings, pending: false, original: d.original,
+      findings: d.findings.map((f, i) => ({...f, id: i, action: "pseudonym", date_mode: "jahr"}))});
+    if (d.kind === "docx") st.view = "orig";   // Word startet in der Seitenansicht
+    if (d.state) {   // früherer Stand: Auswahl, geänderte Pseudonyme, Schwärzungen
+      st.findings = d.state.findings || st.findings; st.blackouts = d.state.blackouts || []; st.rm = d.state.rm !== false; st.done = !!d.state.done;
+    }
+  } catch (e) { st.pending = false; st.error = st.name + ": " + e.message; }
+  renderStrip();
+  if (ACT < 0 && !st.error) { $("upmsg").innerHTML = ""; activate(OPEN.indexOf(st)); }
+  else if (ACT < 0 && OPEN.every(d => !d.pending)) $("upmsg").innerHTML = OPEN.filter(d => d.error).map(d => "<p class='err'>" + esc(d.error) + "</p>").join("");
+}
+// Bearbeitungsstand automatisch im Ordner des Titels speichern (kurz verzögert)
+function scheduleSave() {
+  const st = S;
+  if (ACT < 0 || !st.docId || !st.original) return;
+  clearTimeout(st.saveTimer);
+  st.pendingSave = true; setSaveInfo(st, "wird gespeichert …");
+  st.saveTimer = setTimeout(() => doSave(st), 700);
+}
+function setSaveInfo(st, text, bad) {
+  if (S !== st) return;
+  const el = $("saveInfo"); el.textContent = text; el.style.color = bad ? "var(--bad)" : "";
+}
+function flushSaves() { for (const st of OPEN) if (st.pendingSave) { clearTimeout(st.saveTimer); doSave(st); } }
+function doSave(st) {
+  st.pendingSave = false;
+  {
+    post("/api/doc/" + st.docId + "/state", {
+      findings: st.findings.map(f => ({id: f.id, text: f.text, category: f.category, source: f.source, source_label: f.source_label, confident: f.confident, count: f.count,
+        checked: f.checked, action: f.action, date_mode: f.date_mode, override: f.override || "", main: !!f.main, gender: f.gender || ""})),
+      blackouts: st.blackouts, rm: st.rm !== false, done: !!st.done})
+      .then(() => setSaveInfo(st, "✓ automatisch gespeichert, " + new Date().toLocaleTimeString("de-DE", {hour: "2-digit", minute: "2-digit"})))
+      .catch(e => setSaveInfo(st, "Speichern fehlgeschlagen: " + e.message, true));
+  }
+}
+function saveUi() { if (ACT >= 0 && OPEN[ACT]) { S.rm = $("rmImg").checked; S.exhtml = $("exmsg").innerHTML; S.view = VIEW; } }
+$("rmImg").onchange = () => { S.rm = $("rmImg").checked; scheduleSave(); markStale(); };
+function activate(i) {
+  saveUi();
+  ACT = i; S = OPEN[i];
+  $("intro").style.display = "none"; $("work").style.display = "grid";
+  $("imgLabel").textContent = "Foto / Bilder entfernen (" + (S.images ? S.images + " erkannt" : "keine erkannt") + ")";
+  $("rmImg").checked = S.rm;
+  $("fname").textContent = S.name + " · Titel: " + S.title; $("saveInfo").textContent = S.original ? "✓ wird automatisch gespeichert" : "";
+  $("warnings").innerHTML = S.warnings.map(w => "<div class='warn'>" + esc(w) + "</div>").join("");
+  $("exmsg").innerHTML = S.exhtml || "";
+  const isPdf = S.kind === "pdf" && S.pages.length > 0, isWord = S.kind === "docx";
+  $("viewbar").style.display = isPdf || isWord ? "flex" : "none";
+  $("vRes").style.display = isPdf || isWord ? "" : "none";
+  setView(isPdf || isWord ? (S.view === "result" ? "result" : "orig") : "text");
+  render(); renderStrip(); updateCrumbs();
+}
+async function openChip(i) {
+  const d = OPEN[i];
+  if (d.pending) return;
+  if (d.error) { alert(d.error); return; }
+  if (d.lazy) { d.lazy = false; d.pending = true; renderStrip(); await analyze(d, null); if (d.error) { alert(d.error); return; } }
+  activate(OPEN.indexOf(d));
+}
+function renderStrip() {
+  const box = $("strip"); box.innerHTML = "";
+  box.style.display = OPEN.length ? "flex" : "none";
+  OPEN.forEach((d, i) => {
+    const b = document.createElement("button"); b.className = "chip" + (i === ACT ? " active" : ""); b.title = d.name;
+    const st = d.pending ? ["wird analysiert …", ""] : d.error ? ["Fehler", "bad"] : d.done ? ["✓ fertig", "ok"] : d.lazy ? ["zum Bearbeiten anklicken", ""] : ["noch offen", ""];
+    const stored = d.original || (d.lazy ? d.name : "");
+    const thumb = d.kind === "pdf" && d.pages.length && d.docId ? "<img class='thumb' alt='' src='/api/doc/" + d.docId + "/page/0.png'>" :
+      stored ? "<img class='thumb' alt='' src='/api/original-thumb?title=" + encodeURIComponent(d.title) + "&file=" + encodeURIComponent(stored) + "'>" :
+      "<span class='ico'>" + esc((d.name.split(".").pop() || "").toUpperCase().slice(0, 4)) + "</span>";
+    b.innerHTML = thumb + "<span><span class='cn'>" + esc(d.name) + "</span><span class='cs " + st[1] + "'>" + st[0] + "</span></span>";
+    b.onclick = () => openChip(i);
+    box.append(b);
+  });
+  if (OPEN.length) {
+    const add = document.createElement("button"); add.className = "chip"; add.style.padding = "12px 14px"; add.textContent = "+ Datei hinzufügen";
+    add.title = "Weitere Dokumente zu diesem Titel laden"; add.onclick = () => $("file").click();
+    box.append(add);
+  }
+}
+
+// ---- Anzeige
+function termRx() {
+  const t = S.findings.map(f => f.text).sort((a, b) => b.length - a.length);
+  if (!t.length) return null;
+  return new RegExp("(?<![\\p{L}\\p{N}_])(?:" + t.map(rxEsc).join("|") + ")(?![\\p{L}\\p{N}_])", "gu");
+}
+function count(term) {
+  const m = S.text.match(new RegExp("(?<![\\p{L}\\p{N}_])" + rxEsc(term) + "(?![\\p{L}\\p{N}_])", "gu"));
+  return m ? m.length : 0;
+}
+function render() { renderDoc(); renderFinds(); schedulePreview(); ensureMarks(); paintMarks(); scheduleSave(); markStale(); }
+async function loadWordHtml(st, key, url) {
+  if (st[key] || st[key + "Busy"]) return;
+  st[key + "Busy"] = true;
+  try { st[key] = (await j(url)).html; } catch (e) { st[key] = "<p class='err'>" + esc(e.message) + "</p>"; }
+  st[key + "Busy"] = false;
+  if (S === st) renderDoc();
+}
+function fitWordPage() {
+  const pg = document.querySelector("#doc .wpage"); if (!pg) return;
+  pg.style.zoom = ""; const w = +pg.dataset.w || pg.offsetWidth, avail = $("doc").clientWidth - 24;
+  if (w > avail && avail > 200) pg.style.zoom = (avail / w).toFixed(3);
+}
+function markDom(root, rx, by) {
+  root.querySelectorAll("p").forEach(p => {
+    const nodes = [], tw = document.createTreeWalker(p, NodeFilter.SHOW_TEXT); let text = "", n;
+    while ((n = tw.nextNode())) { nodes.push([n, text.length]); text += n.data; }
+    for (const m of [...text.matchAll(rx)].reverse()) {
+      const f = by[m[0]]; if (!f) continue;
+      const a = m.index, b = a + m[0].length;
+      for (const [node, off] of nodes.slice().reverse()) {
+        const ls = Math.max(a - off, 0), le = Math.min(b - off, node.data.length);
+        if (le <= ls) continue;
+        const r = document.createRange(); r.setStart(node, ls); r.setEnd(node, le);
+        const mk = document.createElement("mark");
+        mk.dataset.id = f.id; mk.className = f.checked ? "" : "off"; mk.style.background = "var(--c-" + f.category + ")"; mk.title = CFG.categories[f.category];
+        r.surroundContents(mk);
+      }
+    }
+  });
+}
+function renderDoc() {
+  const word = S.kind === "docx" && VIEW !== "text";
+  $("doc").classList.toggle("word", word);
+  if (word) {
+    if (VIEW === "result") {
+      if (!S.pvHtml) { $("doc").innerHTML = "<p class='sub'>Vorschau wird erstellt …</p>"; refreshResult(); return; }   // veraltete Vorschau bleibt stehen, bis die neue da ist
+      $("doc").innerHTML = S.pvHtml;
+      const rev = S.pvRev || {}, keys = Object.keys(rev).sort((a, b) => b.length - a.length);
+      if (keys.length) markDom($("doc"), new RegExp("(?<![\\p{L}\\p{N}_])(?:" + keys.map(rxEsc).join("|") + ")(?![\\p{L}\\p{N}_])", "gu"), rev);
+      fitWordPage();
+      return;
+    }
+    if (!S.html) { $("doc").innerHTML = "<p class='sub'>Ansicht wird erstellt …</p>"; loadWordHtml(S, "html", "/api/doc/" + S.docId + "/html"); return; }
+    $("doc").innerHTML = S.html;
+    const rx0 = termRx();
+    if (rx0) markDom($("doc"), rx0, Object.fromEntries(S.findings.map(f => [f.text, f])));
+    fitWordPage();
+    return;
+  }
+  const rx = termRx(), by = Object.fromEntries(S.findings.map(f => [f.text, f]));
+  let out = "", pos = 0;
+  if (rx) for (const m of S.text.matchAll(rx)) {
+    const f = by[m[0]]; if (!f) continue;
+    out += esc(S.text.slice(pos, m.index)) + "<mark data-id='" + f.id + "' class='" + (f.checked ? "" : "off") + "' style='background:var(--c-" + f.category + ")' title='" + esc(CFG.categories[f.category]) + "'>" + esc(m[0]) + "</mark>";
+    pos = m.index + m[0].length;
+  }
+  $("doc").innerHTML = out + esc(S.text.slice(pos));
+}
+function dateSelect(f) {
+  const d = document.createElement("select"); d.title = "Was passiert mit dem Datum?"; d.className = "date";
+  for (const [k, v] of Object.entries(CFG.date_modes)) d.add(new Option(v, k));
+  d.value = f.date_mode; d.onchange = () => f.date_mode = d.value;
+  return d;
+}
+function findRow(f) {
+  const r = document.createElement("div"); r.className = "row";
+  const cb = Object.assign(document.createElement("input"), {type: "checkbox", checked: f.checked});
+  cb.onchange = () => { f.checked = cb.checked; renderDoc(); paintPreview(); schedulePreview(); syncCatBoxes(); };
+  const t = document.createElement("div"); t.className = "t";
+  t.innerHTML = "<span class='tx' title='Anklicken: zur Stelle im Dokument springen' style='background:var(--c-" + f.category + ");border-radius:3px;padding:0 3px'>" + esc(f.text) + "</span>" + (f.confident ? "" : "<span class='tag'>bitte prüfen</span>") +
+    "<div class='meta'>" + f.count + "× · " + esc(f.source_label || "Manuell") +
+      (VIEW === "orig" && S.markCount && !S.markCount[f.text] ? " · <span style='color:var(--bad)'>auf der Seite nicht gefunden (wird nicht ersetzt)</span>" : "") + "</div>";
+  const pv = document.createElement("div"); pv.className = "pv";
+  const inp = Object.assign(document.createElement("input"), {type: "text", className: "pseudo", title: "Pseudonym, kann überschrieben werden"});
+  inp.value = pvValue(f); inp.disabled = !f.checked || f.action === "schwaerzen";
+  inp.onchange = () => {
+    const auto = (S.prev && S.prev[f.text]) || "";
+    f.override = inp.value.trim() === auto ? "" : inp.value.trim();
+    schedulePreview();
+  };
+  (S.pvInputs = S.pvInputs || {})[f.id] = inp;
+  pv.append("Pseudonym: ", inp); t.append(pv);
+  t.querySelector(".tx").onclick = () => focusFinding(f);
+  const cs = document.createElement("select"); cs.className = "catsel"; cs.title = "Falsch zugeordnet? Kategorie ändern";
+  for (const k of CFG.drop_order) cs.add(new Option(CFG.categories[k], k));
+  cs.value = f.category; cs.onchange = () => { f.category = cs.value; render(); };
+  t.append(cs);
+  const sel = document.createElement("select");
+  sel.add(new Option("Pseudonym", "pseudonym")); sel.add(new Option("Schwärzen", "schwaerzen"));
+  sel.value = f.action; sel.onchange = () => { f.action = sel.value; renderFinds(); schedulePreview(); };
+  const del = document.createElement("button"); del.className = "sec"; del.textContent = "×"; del.title = "Aus Liste entfernen";
+  del.onclick = () => { S.findings = S.findings.filter(x => x !== f); render(); };
+  r.append(cb, t, sel);
+  if (f.category === "geburtsdatum" && f.action === "pseudonym") r.append(dateSelect(f));
+  r.append(del);
+  return r;
+}
+const isSure = f => f.confident || f.checked;
+function syncCatBox(all) {
+  // "alle" gilt nur für sichere Funde; Vorschläge mit "bitte prüfen" haben ihren eigenen Haken
+  const list = S.findings.filter(f => f.category === all.dataset.cat && (all.dataset.group === "unsure" ? !f.confident : f.confident)), n = list.filter(f => f.checked).length;
+  all.checked = list.length > 0 && n === list.length; all.indeterminate = n > 0 && n < list.length;
+}
+const syncCatBoxes = () => document.querySelectorAll("#finds input[data-cat]").forEach(syncCatBox);
+function renderFinds() {
+  const box = $("finds"); box.innerHTML = ""; S.pvInputs = {};
+  for (const cat of Object.keys(CFG.categories)) {
+    const catList = S.findings.filter(f => f.category === cat);
+    if (!catList.length) continue;
+    const list = catList.filter(f => f.confident), unsureAll = catList.filter(f => !f.confident);
+    const h = document.createElement("div"); h.className = "cat"; h.style.cssText = "display:flex;gap:10px;align-items:center;flex-wrap:wrap";
+    const nm = document.createElement("span"); nm.textContent = CFG.categories[cat]; nm.style.flex = "1";
+    const all = Object.assign(document.createElement("input"), {type: "checkbox", title: "Alle Funde dieser Kategorie an- oder abhaken"});
+    all.dataset.cat = cat; syncCatBox(all);
+    all.onchange = () => { list.forEach(f => f.checked = all.checked); render(); };
+    if (!list.length) all.disabled = true;
+    const lab = document.createElement("label"); lab.className = "inline"; lab.style.cssText = "font-size:13px;font-weight:400;gap:4px"; lab.append(all, " alle");
+    const act = document.createElement("select"); act.title = "Für alle Funde dieser Kategorie: Pseudonym einsetzen oder schwärzen";
+    act.add(new Option("alle: Pseudonym", "pseudonym")); act.add(new Option("alle: Schwärzen", "schwaerzen"));
+    act.value = catList.every(f => f.action === "schwaerzen") ? "schwaerzen" : "pseudonym";
+    act.onchange = () => { catList.forEach(f => f.action = act.value); renderFinds(); schedulePreview(); };
+    h.append(nm, lab, act); box.appendChild(h);
+    const sure = catList.filter(f => f.confident || f.checked), unsure = catList.filter(f => !(f.confident || f.checked));
+    const target = box;
+    for (const f of sure) target.appendChild(findRow(f));
+    if (unsure.length) {
+      const d = document.createElement("details");
+      d.innerHTML = "<summary class='sub' style='cursor:pointer'>Weitere Vorschläge anzeigen, bitte prüfen (" + unsure.length + ")</summary>";
+      const ub = Object.assign(document.createElement("input"), {type: "checkbox", title: "Alle unsicheren Vorschläge dieser Kategorie ankreuzen (Achtung: darunter sind oft Fehlfunde)"});
+      ub.dataset.cat = cat; ub.dataset.group = "unsure"; syncCatBox(ub);
+      ub.onchange = () => { unsureAll.forEach(f => f.checked = ub.checked); render(); };
+      const ul = document.createElement("label"); ul.className = "inline sub"; ul.style.cssText = "margin:4px 0;gap:4px"; ul.append(ub, " alle unsicheren Vorschläge ankreuzen (oft Fehlfunde, danach durchsehen)");
+      d.append(ul);
+      for (const f of unsure) d.appendChild(findRow(f));
+      box.appendChild(d);
+    }
+  }
+  if (!S.findings.length) box.innerHTML = "<p class='sub'>Nichts gefunden. Markieren Sie Stellen im Text oder ergänzen Sie Begriffe.</p>";
+}
+
+// ---- Live-Vorschau des Ergebnisses (aktueller Stand, ohne zu speichern)
+let rrTimer = null;
+function markStale() { S.pvStale = true; if (VIEW === "result") { clearTimeout(rrTimer); rrTimer = setTimeout(refreshResult, 500); } }
+async function refreshResult() {
+  const st = S;
+  clearTimeout(rrTimer);
+  if (!st.docId || !(st.kind === "pdf" || st.kind === "docx")) return;
+  if (st.rrBusy) { st.rrAgain = true; return; }
+  st.rrBusy = true; $("hint").textContent = "Vorschau wird aktualisiert …";
+  try {
+    const d = await post("/api/doc/" + st.docId + "/preview-render", {title: st.title, items: planItems(), remove_images: $("rmImg").checked, blackouts: st.blackouts, prev_rid: st.prid || ""});
+    st.prid = d.rid; st.pvMap = d.previews; st.pvHtml = d.html || ""; st.pvStale = false;
+  } catch (e) { st.rrBusy = false; if (S === st && VIEW === "result") $("hint").textContent = "Vorschau nicht möglich: " + e.message; return; }
+  st.rrBusy = false;
+  if (st.rrAgain) { st.rrAgain = false; st.pvStale = true; if (S === st) markStale(); return; }
+  if (S === st && VIEW === "result") drawResult();
+}
+function drawResult() {
+  $("hint").textContent = "So sieht die fertige Datei aus. Die ersetzten Stellen sind markiert; ein Klick darauf öffnet die Optionen.";
+  const rev = {};
+  for (const f of S.findings) { if (!f.checked || f.action === "schwaerzen") continue; const r = (S.pvMap || {})[f.text]; if (r && !rev[r]) rev[r] = f; }
+  S.pvRev = rev;
+  if (S.kind === "docx") { renderDoc(); return; }
+  buildPages("result");
+  setTool(TOOL);
+  $("hint").textContent = "So sieht die fertige Datei aus. Hier können Sie genauso markieren und schwärzen wie im Original; ein Klick auf eine ersetzte Stelle öffnet ihre Optionen.";
+  paintResultMarks(rev);
+}
+async function paintResultMarks(rev) {
+  const terms = Object.keys(rev), st = S, rid = S.prid;
+  if (!terms.length) return;
+  try {
+    const d = await post("/api/result/" + rid + "/marks", {terms});
+    if (S !== st || VIEW !== "result" || st.prid !== rid) return;
+    for (const m of d.marks) {
+      const f = rev[m.term], ov = pageOv(m.page); if (!f || !ov) continue;
+      const el = document.createElement("div"); el.className = "mk"; el.dataset.term = f.text;
+      el.style.cssText = "left:" + (m.x * 100) + "%;top:" + (m.y * 100) + "%;width:" + (m.w * 100) + "%;height:" + (m.h * 100) + "%;background:" + PAGE_COLORS[f.category];
+      el.title = m.term + " ← " + f.text + " (" + CFG.categories[f.category] + ")";
+      el.onclick = e => { const r = el.getBoundingClientRect(); openPop(f, {left: r.left, bottom: r.bottom}); e.stopPropagation(); };
+      ov.append(el);
+    }
+  } catch (e) { /* Markierungen sind nur eine Anzeige */ }
+}
+
+// ---- Zur Stelle springen
+const FOCUS = {};
+function focusFinding(f) {
+  if (VIEW === "result") setView("orig");
+  const n = FOCUS[f.id] = (FOCUS[f.id] === undefined ? 0 : FOCUS[f.id] + 1);
+  const run = () => {
+    let els = [...document.querySelectorAll('#doc mark[data-id="' + f.id + '"]')].filter(e => e.offsetParent !== null);
+    if (!els.length) els = [...document.querySelectorAll("#pages .mk")].filter(e => e.dataset.term === f.text);
+    if (!els.length) { $("hint").textContent = "„" + f.text + "“ wurde im Dokument nicht gefunden (wird dann auch nicht ersetzt)."; return; }
+    const el = els[n % els.length];
+    el.scrollIntoView({block: "center", behavior: "smooth"});
+    el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+    setTimeout(() => el.classList.remove("flash"), 1900);
+  };
+  setTimeout(run, 60);
+}
+const NAME_PARTICLES = new Set(["von", "van", "vom", "zu", "zur", "de", "del", "della", "der", "den", "ten", "ter", "la", "le", "di", "da", "dos", "du", "bin", "ibn", "al", "el", "af", "herr", "frau", "dr", "prof"]);
+function expandName(f) {
+  // Von Hand markierter Name: Vor-/Nachnamen einzeln und alle Schreibweisen (GROSS, klein) im Dokument ebenfalls aufnehmen
+  const parts = f.text.split(/[\s,]+/).filter(p => p.length >= 3 && !NAME_PARTICLES.has(p.toLowerCase().replace(/\.$/, "")));
+  const bases = parts.length > 1 ? [f.text, ...parts] : [f.text];
+  let added = 0;
+  for (const b of bases) {
+    const m = S.text.match(new RegExp("(?<![\\p{L}\\p{N}_@])(?<![\\p{L}\\p{N}]\\.)" + b.split(/\s+/).map(rxEsc).join("\\s+") + "(?![\\p{L}\\p{N}_@])(?!\\.[\\p{L}\\p{N}])", "giu")) || [];   // Teile von E-Mail-Adressen und Links nicht einzeln
+    for (const v of new Set(m)) {
+      if (v.includes("\n") || S.findings.some(x => x.text === v)) continue;
+      S.findings.push({id: Date.now() + Math.random(), text: v, category: f.category, checked: true, action: "pseudonym", date_mode: "jahr", count: count(v), confident: true, source_label: "Manuell (zu „" + f.text + "“)", gender: f.gender || ""});
+      added++;
+    }
+  }
+  return added;
+}
+
+// ---- Ergänzen
+function addFinding(text, category, remember) {
+  text = text.trim(); if (text.length < 2) return;
+  const pf = VIEW === "result" && S.pvRev && S.pvRev[text];
+  if (pf) { $("hint").textContent = "„" + text + "“ ist das Pseudonym für „" + pf.text + "“. Zum Ändern auf die Markierung klicken."; return; }
+  let f = S.findings.find(x => x.text === text);
+  if (f) { f.category = category; f.checked = true; f.confident = true; }
+  else S.findings.push({id: Date.now(), text, category, checked: true, action: "pseudonym", date_mode: "jahr", count: count(text), confident: true, source_label: "Manuell"});
+  if (category === "name") expandName(S.findings.find(x => x.text === text));
+  if (remember) j("/api/dictionary", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({text, category})}).catch(() => {});
+  render();
+}
+$("addBtn").onclick = () => { addFinding($("addText").value, $("addCat").value, $("addRemember").checked); $("addText").value = ""; };
+$("addText").onkeydown = e => e.key === "Enter" && $("addBtn").click();
+
+const bar = $("bar");
+let selText = "";
+$("doc").addEventListener("mouseup", () => {
+  const sel = window.getSelection(), t = sel.toString().trim();
+  if (!t || t.includes("\n") || t.length > 120) { bar.style.display = "none"; return; }
+  selText = t;
+  const r = sel.getRangeAt(0).getBoundingClientRect();
+  bar.style.display = "flex";
+  bar.style.left = Math.min(r.left, window.innerWidth - 380) + "px";
+  bar.style.top = (r.bottom + 8) + "px";
+});
+document.addEventListener("mousedown", e => { if (!bar.contains(e.target)) bar.style.display = "none"; });
+$("barBtn").onclick = () => { addFinding(selText, $("barCat").value, $("barRemember").checked); bar.style.display = "none"; window.getSelection().removeAllRanges(); };
+
+// ---- Markierung anklicken: Optionen direkt am Text
+const pop = $("pop");
+let popTimer = null;
+function closePop() { pop.style.display = "none"; }
+function popRow(...els) { const d = document.createElement("div"); d.className = "inline"; d.append(...els); return d; }
+function openPop(f, pos) {
+  pop.innerHTML = "";
+  const title = document.createElement("div"); title.className = "t"; title.textContent = f.text;
+  const cb = Object.assign(document.createElement("input"), {type: "checkbox", checked: f.checked});
+  cb.onchange = () => { f.checked = cb.checked; render(); };
+  const lab = document.createElement("label"); lab.className = "inline"; lab.append(cb, " wird ersetzt");
+  const act = document.createElement("select");
+  act.add(new Option("Pseudonym", "pseudonym")); act.add(new Option("Schwärzen", "schwaerzen"));
+  act.value = f.action; act.onchange = () => { f.action = act.value; render(); openPop(f); };
+  const cat = document.createElement("select");
+  for (const k of CFG.drop_order) cat.add(new Option(CFG.categories[k], k));
+  cat.value = f.category; cat.onchange = () => { f.category = cat.value; render(); openPop(f); };
+  pop.append(title, lab, popRow(act, cat));
+  if (f.category === "geburtsdatum" && f.action === "pseudonym") pop.append(popRow(dateSelect(f)));
+  const del = document.createElement("button"); del.className = "sec"; del.textContent = "Markierung entfernen";
+  del.onclick = () => { S.findings = S.findings.filter(x => x !== f); render(); closePop(); };
+  const ok = document.createElement("button"); ok.textContent = "Fertig"; ok.onclick = closePop;
+  pop.append(popRow(del, ok));
+  if (pos) { pop.style.left = Math.max(8, Math.min(pos.left, window.innerWidth - 300)) + "px"; pop.style.top = (pos.bottom + 6) + "px"; }
+  pop.style.display = "flex";
+}
+$("doc").addEventListener("click", e => {
+  const m = e.target.closest("mark");
+  if (!m || window.getSelection().toString().trim()) return;
+  const f = S.findings.find(x => String(x.id) === m.dataset.id);
+  if (!f) return;
+  const r = m.getBoundingClientRect(), pos = {left: r.left, bottom: r.bottom};
+  clearTimeout(popTimer);
+  popTimer = setTimeout(() => openPop(f, pos), 220);   // Doppelklick (Wort markieren) hat Vorrang
+});
+$("doc").addEventListener("dblclick", () => clearTimeout(popTimer));
+document.addEventListener("mousedown", e => { if (!pop.contains(e.target) && !e.target.closest("mark")) closePop(); });
+
+// ---- Originalansicht (PDF), Markierungen und Schwärzwerkzeug
+const HINTS = {
+  sel: "Eine Markierung anklicken = ändern. Ein Wort anklicken oder über mehrere Wörter ziehen = neu markieren (Kategorie siehe „Neu markieren als“).",
+  rect: "Rechteck über die Stelle ziehen. Beim Erstellen wird sie fest geschwärzt (darunter bleibt nichts).",
+  oval: "Kreis oder Oval über die Stelle ziehen, z. B. für einen Stempel. Beim Erstellen wird sie fest geschwärzt.",
+  pen: "Mit gedrückter Maustaste über die Stelle malen. Beim Erstellen wird sie fest geschwärzt."};
+function setView(v) {
+  VIEW = v;
+  if (S.kind === "docx") {   // Word: Seitenansicht (Original, Ergebnis) oder reiner Text
+    $("doc").style.display = ""; $("pages").style.display = "none"; $("tools").style.display = "none";
+    $("vOrig").className = v === "orig" ? "" : "sec"; $("vRes").className = v === "result" ? "" : "sec";
+    $("hint").textContent = v === "result" ? "Vorschau wird erstellt …" :
+      "Etwas übersehen? Text markieren, um die Stelle aufzunehmen. Auf eine Markierung klicken, um sie zu ändern." + (v === "orig" ? " Die Seitenansicht ist eine Annäherung an das Original." : "");
+    renderDoc();
+    if (v === "result" && !S.pvStale && S.pvHtml) drawResult();
+    return;
+  }
+  const pdf = $("viewbar").style.display !== "none";
+  $("doc").style.display = v === "text" ? "" : "none";
+  $("pages").style.display = v === "text" ? "none" : "";
+  $("tools").style.display = v === "orig" || v === "result" ? "flex" : "none";
+  $("vOrig").className = v === "orig" ? "" : "sec"; $("vRes").className = v === "result" ? "" : "sec";
+  if (v === "text") { $("hint").textContent = "Etwas übersehen? Text markieren, um die Stelle aufzunehmen. Auf eine Markierung klicken, um sie zu ändern."; return; }
+  if (v === "result") {
+    $("hint").textContent = "Vorschau wird erstellt …";
+    if (S.pvStale !== false || !S.prid) { $("pages").innerHTML = ""; refreshResult(); } else drawResult();
+    return;
+  }
+  buildPages(v);
+  if (v === "orig") { setTool(TOOL); S.markKey = ""; ensureMarks(); paintMarks(); }
+}
+$("vOrig").onclick = () => setView("orig"); $("vRes").onclick = () => setView("result");
+function setTool(t) {
+  TOOL = t;
+  for (const [id, k] of [["tSel", "sel"], ["tRect", "rect"], ["tOval", "oval"], ["tPen", "pen"]]) $(id).classList.toggle("active", k === t);
+  $("hint").textContent = HINTS[t];
+  document.querySelectorAll("#pages .ov").forEach(o => o.classList.toggle("draw", t !== "sel"));
+}
+for (const [id, k] of [["tSel", "sel"], ["tRect", "rect"], ["tOval", "oval"], ["tPen", "pen"]]) $(id).onclick = () => setTool(k);
+$("tUndo").onclick = () => { S.blackouts.pop(); paintShapes(); markStale(); };
+
+function buildPages(kind) {
+  const box = $("pages"); box.innerHTML = "";
+  S.pages.forEach((p, i) => {
+    const pg = document.createElement("div"); pg.className = "pg"; pg.style.aspectRatio = p.w + " / " + p.h; pg.dataset.p = i;
+    const img = document.createElement("img"); img.alt = "Seite " + (i + 1); img.draggable = false;
+    img.src = kind === "result" ? "/api/result/" + S.prid + "/page/" + i + ".png" : "/api/doc/" + S.docId + "/page/" + i + ".png";
+    pg.append(img);
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg"); svg.setAttribute("viewBox", "0 0 1 " + (p.h / p.w)); svg.setAttribute("preserveAspectRatio", "none");
+    pg.append(svg);
+    const ov = document.createElement("div"); ov.className = "ov"; pg.append(ov);
+    attachDraw(ov, i, p);
+    box.append(pg);
+  });
+  paintShapes();
+}
+function pageOv(i) { return document.querySelector("#pages .pg[data-p='" + i + "'] .ov"); }
+async function ensureMarks() {
+  if (VIEW !== "orig" || S.kind !== "pdf") return;
+  const terms = [...new Set(S.findings.map(f => f.text))].sort();
+  const key = terms.join("\u0001");
+  if (key === S.markKey) return;
+  S.markKey = key;
+  if (!terms.length) { S.marks = []; paintMarks(); return; }
+  try {
+    const d = await j("/api/doc/" + S.docId + "/marks", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({terms})});
+    if (S.markKey === key) {
+      S.marks = d.marks; S.markCount = {};
+      for (const m of d.marks) S.markCount[m.term] = (S.markCount[m.term] || 0) + 1;
+      paintMarks(); renderFinds();
+    }
+  } catch (e) { /* Markierungen sind nur eine Anzeige */ }
+}
+function paintMarks() {
+  if (VIEW !== "orig") return;
+  document.querySelectorAll("#pages .mk").forEach(m => m.remove());
+  for (const m of S.marks || []) {
+    const f = S.findings.find(x => x.text === m.term), ov = pageOv(m.page);
+    if (!f || !ov) continue;
+    const d = document.createElement("div"); d.className = "mk" + (f.checked ? "" : " off");
+    d.style.cssText = "left:" + (m.x * 100) + "%;top:" + (m.y * 100) + "%;width:" + (m.w * 100) + "%;height:" + (m.h * 100) + "%;background:" + PAGE_COLORS[f.category];
+    d.title = f.text + (pvValue(f) ? " → " + pvValue(f) : "") + " (" + CFG.categories[f.category] + ")"; d.dataset.term = f.text;
+    d.onclick = e => { const r = d.getBoundingClientRect(); openPop(f, {left: r.left, bottom: r.bottom}); e.stopPropagation(); };
+    ov.append(d);
+  }
+}
+function paintShapes() {
+  scheduleSave();
+  const R = i => S.pages[i].h / S.pages[i].w;
+  document.querySelectorAll("#pages .pg").forEach(pg => {
+    const i = +pg.dataset.p, svg = pg.querySelector("svg"); svg.innerHTML = "";
+    if (pg.querySelector(".ov") === null) return;   // Ergebnisansicht: Schwärzungen sind schon eingebrannt
+    for (const b of S.blackouts.filter(b => b.page === i)) svg.append(shapeEl(b, R(i)));
+  });
+}
+function shapeEl(b, ratio) {
+  const ns = "http://www.w3.org/2000/svg", f = "#000";
+  if (b.shape === "pen") {
+    const e = document.createElementNS(ns, "polyline");
+    e.setAttribute("points", b.pts.map(p => p[0] + "," + p[1] * ratio).join(" "));
+    e.setAttribute("fill", "none"); e.setAttribute("stroke", f); e.setAttribute("stroke-width", b.w);
+    e.setAttribute("stroke-linecap", "round"); e.setAttribute("stroke-linejoin", "round");
+    return e;
+  }
+  const x = Math.min(b.x0, b.x1), y = Math.min(b.y0, b.y1) * ratio, w = Math.abs(b.x1 - b.x0), h = Math.abs(b.y1 - b.y0) * ratio;
+  const e = document.createElementNS(ns, b.shape === "rect" ? "rect" : "ellipse");
+  if (b.shape === "rect") { e.setAttribute("x", x); e.setAttribute("y", y); e.setAttribute("width", w); e.setAttribute("height", h); }
+  else { e.setAttribute("cx", x + w / 2); e.setAttribute("cy", y + h / 2); e.setAttribute("rx", w / 2); e.setAttribute("ry", h / 2); }
+  e.setAttribute("fill", f);
+  return e;
+}
+function attachDraw(ov, page, p) {
+  let start = null, pts = null, rub = null, live = null;
+  const at = e => { const r = ov.getBoundingClientRect(); return [Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), Math.min(1, Math.max(0, (e.clientY - r.top) / r.height))]; };
+  ov.addEventListener("pointerdown", e => {
+    if (e.button !== 0 || (TOOL === "sel" && e.target.closest(".mk"))) return;   // Klick auf eine Markierung öffnet deren Menü
+    e.preventDefault();
+    try { ov.setPointerCapture(e.pointerId); } catch (_) { /* z. B. bei simulierten Ereignissen */ }
+    start = at(e); pts = [start];
+    if (TOOL !== "pen") { rub = document.createElement("div"); rub.className = "rubber"; if (TOOL === "oval") rub.style.borderRadius = "50%"; ov.append(rub); }
+    if (TOOL === "sel") rub.style.display = "none";   // Klick: kein Rahmen zeigen, erst beim Ziehen
+    else { live = {page, shape: "pen", pts, w: +$("penW").value}; S.blackouts.push(live); paintShapes(); markStale(); }
+  });
+  ov.addEventListener("pointermove", e => {
+    if (!start) return;
+    const c = at(e);
+    if (rub) { if (TOOL === "sel" && Math.abs(c[0] - start[0]) + Math.abs(c[1] - start[1]) > 0.01) rub.style.display = ""; rub.style.left = Math.min(start[0], c[0]) * 100 + "%"; rub.style.top = Math.min(start[1], c[1]) * 100 + "%"; rub.style.width = Math.abs(c[0] - start[0]) * 100 + "%"; rub.style.height = Math.abs(c[1] - start[1]) * 100 + "%"; }
+    else if (live) { pts.push(c); paintShapes(); }
+  });
+  ov.addEventListener("pointerup", async e => {
+    if (!start) return;
+    const c = at(e), s0 = start; start = null;
+    if (rub) { rub.remove(); rub = null; }
+    const click = Math.abs(c[0] - s0[0]) < 0.006 && Math.abs(c[1] - s0[1]) < 0.006;
+    if (TOOL === "pen") { live = null; paintShapes(); return; }
+    if (TOOL === "sel") {   // Wort anklicken oder über Wörter ziehen: Text lesen und als neuen Fund aufnehmen
+      const r = ov.getBoundingClientRect(), pos = {left: r.left + c[0] * r.width, bottom: r.top + Math.max(c[1], s0[1]) * r.height + 8};
+      try {
+        const d = await j(VIEW === "result" ? "/api/result/" + S.prid + "/rect" : "/api/doc/" + S.docId + "/rect", {method: "POST", headers: {"Content-Type": "application/json"},
+          body: JSON.stringify({page, x0: s0[0], y0: s0[1], x1: c[0], y1: c[1], touch: click})});
+        const pf = VIEW === "result" && d.text && S.pvRev && S.pvRev[d.text];
+        if (pf) { $("hint").textContent = "„" + d.text + "“ ist das Pseudonym für „" + pf.text + "“."; openPop(pf, pos); }
+        else if (d.text) {
+          addFinding(d.text, $("frameCat").value, false);
+          const f = S.findings.find(x => x.text === d.text);
+          $("hint").textContent = "„" + d.text + "“ wurde als " + CFG.categories[f ? f.category : $("frameCat").value] + " markiert. Im Menü kannst du es ändern.";
+          if (f) openPop(f, pos);
+        } else $("hint").textContent = "Hier wurde kein Text gefunden. Bei gescannten Seiten stattdessen schwärzen (Rechteck, Kreis oder Stift).";
+      } catch (err) { $("hint").textContent = err.message; }
+      return;
+    }
+    if (click) return;
+    S.blackouts.push({page, shape: TOOL, x0: s0[0], y0: s0[1], x1: c[0], y1: c[1]});
+    paintShapes();
+  });
+}
+
+// ---- Pseudonym-Vorschau
+const planItem = f => ({text: f.text, category: f.category, action: f.action,
+  date_mode: f.category === "geburtsdatum" ? f.date_mode : "", main: !!f.main, gender: f.gender || "", override: f.override || ""});
+const planItems = () => S.findings.filter(f => f.checked).map(planItem);
+let pvTimer = null;
+function schedulePreview() {
+  clearTimeout(pvTimer);
+  pvTimer = setTimeout(async () => {
+    if (!S.title) return;
+    try {
+      const d = await j("/api/preview", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({title: S.title, doc_id: S.docId, items: planItems(), extra: S.findings.filter(f => !f.checked).map(planItem)})});
+      S.prev = d.previews; S.sug = d.suggestions || {}; paintPreview(); markStale();
+    } catch (e) { /* Vorschau ist nur eine Hilfe */ }
+  }, 200);
+}
+function pvValue(f) {
+  if (!f.checked) return (S.sug && S.sug[f.text]) || "";
+  if (f.action === "schwaerzen") return "[geschwärzt]";
+  return f.override || (S.prev && S.prev[f.text]) || "";
+}
+function paintPreview() {
+  for (const [id, inp] of Object.entries(S.pvInputs || {})) {
+    const f = S.findings.find(x => String(x.id) === id);
+    if (f && document.activeElement !== inp) { inp.value = pvValue(f); inp.disabled = !f.checked || f.action === "schwaerzen"; }
+  }
+}
+
+// ---- Export
+const setExportBusy = b => { $("exportBtn").disabled = b; $("exportTop").disabled = b; };
+$("exportTop").onclick = () => { $("exportBtn").click(); $("exmsg").scrollIntoView({block: "nearest", behavior: "smooth"}); };
+$("exportBtn").onclick = async () => {
+  const st = S, items = planItems();
+  $("exmsg").innerHTML = "<p class='sub'>Wird erstellt …</p>"; setExportBusy(true);
+  let h;
+  try {
+    const d = await post("/api/export", {doc_id: st.docId, title: st.title, items, remove_images: $("rmImg").checked, blackouts: st.blackouts});
+    st.done = true; st.rid = d.result_pages || st.kind === "docx" ? d.result_id : null; st.pvStale = true; scheduleSave();
+    h = "<p>Gespeichert als <strong>" + esc(d.file) + "</strong> im Ordner <strong>" + esc(d.folder) + "</strong><br>" +
+      "<button class='sec' data-act='folder'>Ordner öffnen</button> <a href='/download/" + d.result_id + "/doc'>Datei zusätzlich herunterladen</a></p>";
+    if (d.has_key) h += "<div class='warn'><strong>Schlüsseldatei:</strong> Im selben Ordner liegt die Schlüsseldatei. Sie enthält die echten Angaben im Klartext. Laden Sie nur die anonymisierten Dokumente in eine KI, nie die Schlüsseldatei.</div>";
+    if (d.leftover.length) h += "<div class='warn'><strong>Achtung:</strong> Diese Begriffe stehen noch in der Datei: " + d.leftover.map(esc).join(", ") + "</div>";
+    h += "<div class='warn'>Bitte die Ausgabe vollständig prüfen. Die Erkennung kann Angaben übersehen.</div>";
+    h += "<details><summary>Ersetzungen anzeigen</summary><table>" + d.mapping.map(m => "<tr><td>" + esc(m.original) + "</td><td>→ " + esc(m.replacement) + "</td></tr>").join("") + "</table></details>";
+    const rest = OPEN.filter(x => !x.done && !x.pending && !x.error).length;
+    h += "<p class='inline'>" + (rest ? "<button data-act='next'>Nächstes Dokument (" + rest + " noch offen)</button>" : "<button data-act='finish'>Fertig: zu „" + esc(st.title) + "“</button>") +
+      " <button class='sec' data-act='add'>+ Datei hinzufügen</button></p>";
+  } catch (e) { h = "<p class='err'>" + esc(e.message) + "</p>"; }
+  st.exhtml = h;
+  if (S === st) {
+    $("exmsg").innerHTML = h;
+    if (st.rid) { $("vRes").style.display = ""; setView("result"); }
+  }
+  renderStrip();
+  setExportBusy(false);
+};
+$("exmsg").addEventListener("click", e => {
+  const a = e.target.closest("[data-act]"); if (!a) return;
+  if (a.dataset.act === "folder") post("/api/open-folder", {title: S.title}).catch(err => alert(err.message));
+  else if (a.dataset.act === "next") { const n = OPEN.findIndex(d => !d.done && !d.pending && !d.error); if (n >= 0) openChip(n); }
+  else if (a.dataset.act === "add") $("file").click();
+  else if (a.dataset.act === "finish") openTitle(S.title);
+});
+
+// ---- Persönliche Daten wieder einsetzen
+$("rBtn").onclick = async () => {
+  const f = $("rFile").files[0], k = $("rKey").files[0], t = $("rTitle").value;
+  if (!f || (!k && !t)) { $("rMsg").innerHTML = "<p class='err'>Bitte Dokument und Titel (oder Schlüsseldatei) auswählen.</p>"; return; }
+  const fd = new FormData(); fd.append("file", f);
+  if (k) fd.append("key", k); else fd.append("title", t);
+  $("rMsg").innerHTML = "<p class='sub'>Wird bearbeitet …</p>"; $("rBtn").disabled = true;
+  try {
+    const d = await j("/api/restore", {method: "POST", body: fd});
+    let h = "<p><a href='/download/" + d.result_id + "/doc'><strong>Wiederhergestelltes Dokument herunterladen</strong></a>" + (d.folder ? "<br><span class='sub'>Auch gespeichert als " + esc(d.file) + " im Ordner " + esc(d.folder) + "</span>" : "") + "</p>";
+    const n = d.restored.reduce((a, x) => a + x.count, 0);
+    h += "<p>" + n + " Stellen wurden zurückgesetzt (" + d.restored.length + " verschiedene Pseudonyme).</p>";
+    if (d.missing.length) h += "<div class='warn'><strong>Nicht im Dokument gefunden:</strong> " + d.missing.map(x => esc(x.replacement)).join(", ") + ". Die KI hat diese Angaben vielleicht verändert oder weggelassen.</div>";
+    if (d.unknown.length) h += "<div class='warn'><strong>Unbekannte Pseudonyme im Dokument:</strong> " + d.unknown.map(esc).join(", ") + ". Sie gehören nicht zu dieser Schlüsseldatei und bleiben stehen.</div>";
+    if (d.not_restorable) h += "<div class='warn'>" + d.not_restorable + " Angabe(n) waren geschwärzt oder verkürzt und lassen sich nicht zurückholen.</div>";
+    h += "<div class='warn'>Bitte das Ergebnis prüfen.</div>";
+    if (d.kind === "docx" || d.result_pages) h += "<details open style='margin-top:10px'><summary class='sub' style='cursor:pointer'>Vorschau des Ergebnisses</summary><div id='rPrev' class='sub'>Wird erstellt …</div></details>";
+    $("rMsg").innerHTML = h;
+    if (d.kind === "docx") {
+      try { $("rPrev").innerHTML = "<div id='rPrevDoc' class='word' style='background:#dfe3e8;padding:10px;max-height:80vh;overflow:auto'>" + (await j("/api/result/" + d.result_id + "/html")).html + "</div>";
+        const pg = document.querySelector("#rPrevDoc .wpage"), w = +pg.dataset.w || pg.offsetWidth, avail = $("rPrevDoc").clientWidth - 24; if (w > avail && avail > 200) pg.style.zoom = (avail / w).toFixed(3); }
+      catch (e) { $("rPrev").textContent = "Keine Vorschau möglich: " + e.message; }
+    } else if (d.result_pages) {
+      $("rPrev").innerHTML = Array.from({length: d.result_pages}, (_, i) => "<img alt='Seite " + (i + 1) + "' style='max-width:100%;border:1px solid var(--line);margin-bottom:8px' src='/api/result/" + d.result_id + "/page/" + i + ".png'>").join("");
+    }
+  } catch (e) { $("rMsg").innerHTML = "<p class='err'>" + esc(e.message) + "</p>"; }
+  $("rBtn").disabled = false;
+};
+
+// ---- Wörterbuch
+async function loadDict() {
+  const d = await j("/api/dictionary");
+  $("dictList").innerHTML = d.entries.length ? "<table>" + d.entries.map((e, i) => "<tr><td>" + esc(e.text) + "</td><td>" + esc(CFG.categories[e.category] || e.category) + "</td><td><button class='sec' data-i='" + i + "'>Löschen</button></td></tr>").join("") + "</table>" : "<p class='sub'>Noch leer.</p>";
+  $("dictList").querySelectorAll("button").forEach(b => b.onclick = async () => {
+    const e = d.entries[+b.dataset.i];
+    await j("/api/dictionary", {method: "DELETE", headers: {"Content-Type": "application/json"}, body: JSON.stringify(e)}); loadDict();
+  });
+}
+$("dictBtn").onclick = () => { loadDict(); $("dictDlg").showModal(); };
+$("quitBtn").onclick = async () => {
+  flushSaves();
+  if (!confirm("Tool beenden? Ihre Arbeit ist automatisch gespeichert und kann über die Ablage weiter bearbeitet werden.")) return;
+  await new Promise(r => setTimeout(r, 500));   // laufende Speicherungen abwarten
+  await j("/api/quit", {method: "POST"}).catch(() => {});
+  document.body.innerHTML = "<main><div class='card'><h2>Beendet</h2><p>Sie können dieses Fenster jetzt schließen.</p></div></main>";
+};
+init();
+</script>
+</body>
+</html>
