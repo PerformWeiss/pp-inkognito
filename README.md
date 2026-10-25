@@ -23,18 +23,29 @@ der Grund, warum Ihre Unterlagen den Rechner nicht verlassen müssen.
   anonymisierten Dokumente. Pseudonymisierte Daten bleiben personenbezogen, solange die Schlüsseldatei existiert.
 - Für die Einhaltung des Datenschutzes sind Sie selbst verantwortlich.
 
-## Installation
+## Installation und erster Start (bitte zuerst lesen)
 
-**Für Anwendende:** Laden Sie unter [Releases](../../releases) die Datei für Ihr System herunter.
+Laden Sie unter [Releases](../../releases) die Datei für Ihr System herunter. Das Programm ist kostenlos und **nicht signiert**
+(Apple und Microsoft verlangen dafür ein kostenpflichtiges Entwicklerkonto). Deshalb warnen **Mac und Windows beim ersten Start**.
+Das Programm ist nicht beschädigt. So geben Sie es einmalig frei:
 
-- **Mac:** `PP-Inkognito-…-Mac.dmg` öffnen und das Symbol **PP-Inkognito** auf den Ordner **Programme** ziehen. Beim ersten Start Rechtsklick auf das Programm > **Öffnen**.
-- **Windows:** `PP-Inkognito-…-Windows-Setup.exe` doppelklicken und dem Assistenten folgen. Beim ersten Start unter "Weitere Informationen" auf **Trotzdem ausführen** klicken.
+### Mac: `PP-Inkognito-…-Mac.dmg`
 
-**Warum kommt eine Sicherheitsmeldung?** PP-Inkognito ist kostenlos und nicht signiert. Apple und Microsoft verlangen für die
-Signatur ein kostenpflichtiges Entwicklerkonto beziehungsweise Zertifikat (jährlich). Wir verzichten darauf, damit das Programm
-kostenlos bleibt. Deshalb warnen macOS und Windows beim ersten Start vor einem "nicht verifizierten Entwickler". Das Programm ist
-nicht beschädigt; der Quelltext ist öffentlich und die Installer werden automatisch aus ihm gebaut. Wer sicher gehen will, kann es auch
-selbst aus dem Quelltext starten (siehe unten). Details stehen in der Datei `LIES-MICH.txt` im Download.
+1. Die `.dmg`-Datei öffnen und das Symbol **PP-Inkognito** auf den Ordner **Programme** ziehen. Danach das Fenster auswerfen.
+2. In **Programme** auf **PP-Inkognito** doppelklicken. Es erscheint die Meldung *„PP-Inkognito nicht geöffnet – Apple konnte nicht überprüfen, ob PP-Inkognito frei von Schadsoftware ist“*. Klicken Sie auf **Fertig** (nicht auf „In den Papierkorb legen“).
+3. Öffnen Sie die **Systemeinstellungen** (Apfel-Symbol oben links > Systemeinstellungen) und wählen Sie links **Datenschutz & Sicherheit**.
+4. **Scrollen Sie ganz nach unten** zum Abschnitt **Sicherheit**. Dort steht: *„PP-Inkognito“ wurde blockiert, um deinen Mac zu schützen.* Klicken Sie auf **Dennoch öffnen**.
+5. Bestätigen Sie mit Ihrem Passwort oder Touch ID und klicken Sie im nächsten Fenster auf **Öffnen**.
+
+Das geht nur einmal. Der Hinweis in den Systemeinstellungen erscheint erst nach einem Öffnen-Versuch (Schritt 2) und bleibt etwa eine Stunde.
+Ab dem zweiten Start öffnet sich das Programm wie jedes andere. Beim allerersten Start dauert es etwas länger, dann öffnet sich Ihr Browser.
+
+### Windows: `PP-Inkognito-…-Windows-Setup.exe`
+
+1. Die Setup-Datei doppelklicken. Erscheint *„Der Computer wurde durch Windows geschützt“*, klicken Sie auf **Weitere Informationen** und dann auf **Trotzdem ausführen**.
+2. Dem Installationsassistenten folgen. PP-Inkognito finden Sie danach im Startmenü.
+
+Der Quelltext ist öffentlich, und die Installer werden automatisch daraus gebaut.
 
 **Für Entwickelnde:** Voraussetzung: Python 3.9 oder neuer.
 

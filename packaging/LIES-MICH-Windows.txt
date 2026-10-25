@@ -1,5 +1,5 @@
-PP-Inkognito (Windows)
-======================
+PP-Inkognito (Windows) - BITTE ZUERST LESEN
+===========================================
 
 Installieren
 Doppelklicken Sie die Setup-Datei und folgen Sie dem Assistenten. Danach finden Sie PP-Inkognito im Startmenü (und auf dem Desktop,

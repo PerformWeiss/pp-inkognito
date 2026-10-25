@@ -1,22 +1,26 @@
-PP-Inkognito (Mac)
-==================
+PP-Inkognito (Mac) - BITTE ZUERST LESEN
+=======================================
 
-Installieren
-1. Ziehen Sie das Symbol "PP-Inkognito" im geöffneten Fenster auf den Ordner "Programme".
-2. Öffnen Sie "Programme" und starten Sie PP-Inkognito mit einem Rechtsklick > "Öffnen" (nur beim ersten Mal nötig).
+1. Ziehen Sie das Symbol "PP-Inkognito" in diesem Fenster auf den Ordner "Programme".
+2. Öffnen Sie "Programme" und doppelklicken Sie auf "PP-Inkognito".
+   Es erscheint: "PP-Inkognito nicht geöffnet - Apple konnte nicht überprüfen, ob PP-Inkognito frei von Schadsoftware ist".
+   Klicken Sie auf "Fertig" (NICHT auf "In den Papierkorb legen").
+3. Öffnen Sie die Systemeinstellungen (Apfel-Symbol oben links > Systemeinstellungen).
+   Wählen Sie links "Datenschutz & Sicherheit".
+4. Scrollen Sie GANZ NACH UNTEN zum Abschnitt "Sicherheit". Dort steht:
+   "PP-Inkognito wurde blockiert, um deinen Mac zu schützen."  ->  Klicken Sie auf "Dennoch öffnen".
+5. Bestätigen Sie mit Ihrem Passwort oder Touch ID und klicken Sie im nächsten Fenster auf "Öffnen".
 
-Warum die Sicherheitsmeldung?
-Das Programm ist kostenlos und nicht über den Apple-Entwicklerdienst signiert (der kostet Geld pro Jahr). Deshalb sagt macOS
-beim ersten Start "kann nicht geöffnet werden" oder "nicht verifizierter Entwickler". Das Programm ist nicht beschädigt.
-- Rechtsklick auf PP-Inkognito > "Öffnen" > im Fenster nochmals "Öffnen".
-- Wenn "Öffnen" nicht angeboten wird: Systemeinstellungen > Datenschutz & Sicherheit, ganz nach unten scrollen, bei der Meldung
-  zu PP-Inkognito auf "Dennoch öffnen" klicken und mit Ihrem Passwort bestätigen.
-Danach startet es wie jedes andere Programm per Doppelklick.
+Das ist nur beim ersten Mal nötig. Der Hinweis in den Systemeinstellungen erscheint erst nach Schritt 2 und bleibt etwa eine Stunde
+sichtbar. Danach öffnet sich das Programm wie jedes andere.
+
+Warum diese Meldung? Das Programm ist kostenlos und nicht über den kostenpflichtigen Apple-Entwicklerdienst signiert. Es ist nicht
+beschädigt.
 
 Arbeiten
 Nach dem Start öffnet sich Ihr Browser mit dem Programm (der erste Start dauert etwas länger). Es läuft nur auf Ihrem Rechner,
-ohne Internet. Ergebnisse liegen im Ordner Dokumente/Anonymisierungen. Beenden: im Programm oben rechts auf "Beenden" klicken.
+ohne Internet. Ergebnisse liegen im Ordner Dokumente/Anonymisierungen. Beenden: im Programm oben rechts auf "Beenden".
 Hinweise zum Datenschutz stehen im Programm unten unter "Datenschutz".
 
-PerformPlus GmbH · Kontakt: https://performplus.de/kontakt/
+PerformPlus GmbH - Kontakt: https://performplus.de/kontakt/
 Lizenz: AGPL-3.0 (siehe LICENSE.txt)
